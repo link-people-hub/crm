@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>허브링크 | 통신복지 상담 신청 v4</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<style>
+:root{--R:#E4002B;--D:#16162A;--B:#0066CC;--BL:#E8F2FF;--T:#00A89D;--bg:#F5F5F0;--cd:#FFF;--bd:#E4E4E4;--tx:#1A1A2E;--t2:#555;--t3:#999;--ok:#16A34A;--r:14px;--rs:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--D),#2A2A50);color:#fff;position:relative;overflow:hidden}
+.hdr::after{content:'';position:absolute;top:-60%;right:-8%;width:420px;height:420px;background:radial-gradient(circle,rgba(228,0,43,.12),transparent 70%);border-radius:50%}
+.hdr-in{max-width:880px;margin:0 auto;padding:24px;position:relative;z-index:1}
+.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:3px 12px;font-size:11px;color:rgba(255,255,255,.7);margin-bottom:12px}
+.hdr-badge .dot{width:6px;height:6px;background:var(--ok);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr h1{font-size:22px;font-weight:700}.hdr h1 em{color:var(--R);font-style:normal}
+.hdr-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px}
+.site-ind{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px;background:rgba(0,168,157,.15);border:1px solid rgba(0,168,157,.25);border-radius:6px;font-size:11px;font-weight:600;color:var(--T)}
+.prog-w{max-width:880px;margin:0 auto;padding:0 24px;transform:translateY(-14px)}
+.prog{background:var(--cd);border-radius:var(--r);padding:14px 18px;box-shadow:0 4px 16px rgba(0,0,0,.06);display:flex;align-items:center;overflow-x:auto}
+.stp{display:flex;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
+.stp-n{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:#EEE;color:var(--t3);transition:.3s}
+.stp.on .stp-n{background:var(--B);color:#fff;box-shadow:0 2px 8px rgba(0,102,204,.3)}
+.stp.ok .stp-n{background:var(--ok);color:#fff}
+.stp-l{font-size:10px;font-weight:500;color:var(--t3);white-space:nowrap}.stp.on .stp-l{color:var(--B);font-weight:700}.stp.ok .stp-l{color:var(--ok)}
+.stp-line{flex:1;height:2px;background:#EEE;margin:0 5px;min-width:10px}.stp-line.ok{background:var(--ok)}
+.main{max-width:880px;margin:0 auto;padding:4px 24px 60px}
+.sec{display:none;animation:fu .35s ease}.sec.on{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.cd{background:var(--cd);border-radius:var(--r);padding:22px 24px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.04);border:1px solid var(--bd)}
+.cd-t{display:flex;align-items:center;gap:9px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--D)}
+.cd-ico{width:32px;height:32px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:16px}
+.cd-t h2{font-size:15px;font-weight:700}.cd-t h2 small{font-size:10px;font-weight:400;color:var(--t3);display:block}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fg .full{grid-column:1/-1}
+.fi{display:flex;flex-direction:column;gap:4px}
+.fi label{font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px}.fi .req{color:var(--R)}
+.fi input,.fi select,.fi textarea{border:1.5px solid var(--bd);border-radius:var(--rs);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;color:var(--tx);background:#FAFAFA;transition:.2s;outline:none}
+.fi input:focus,.fi select:focus,.fi textarea:focus{border-color:var(--B);background:#fff;box-shadow:0 0 0 3px rgba(0,102,204,.06)}
+.fi input::placeholder,.fi textarea::placeholder{color:var(--t3);font-size:12px}
+.fi select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+/* Role cards */
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.role-card{border:2px solid var(--bd);border-radius:var(--r);padding:16px;cursor:pointer;transition:.2s;background:#FAFAFA;text-align:center}
+.role-card:hover{border-color:var(--B);background:var(--BL)}
+.role-card.sel{border-color:var(--B);background:var(--BL);box-shadow:0 2px 12px rgba(0,102,204,.1)}
+.role-card .r-ico{font-size:28px;margin-bottom:6px}
+.role-card h3{font-size:13px;font-weight:700}.role-card p{font-size:10px;color:var(--t2)}
+/* Site cards */
+.site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.site-card{border:2px solid var(--bd);border-radius:var(--r);padding:18px;cursor:pointer;transition:.2s;background:#FAFAFA;position:relative}
+.site-card:hover{border-color:var(--B);background:var(--BL)}
+.site-card.sel{border-color:var(--B);background:var(--BL)}
+.site-card.sel::after{content:'✓';position:absolute;top:10px;right:12px;width:22px;height:22px;background:var(--B);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.site-card h3{font-size:14px;font-weight:700;margin-bottom:3px}.site-card p{font-size:11px;color:var(--t2)}
+.tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;margin-top:6px}
+.tag-on{background:#DCFCE7;color:#166534}.tag-soon{background:#FEF3C7;color:#92400E}
+/* Checkbox/Radio (fixed - using div not label) */
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px}
+.ck{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1.5px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:.2s;background:#FAFAFA}
+.ck:hover{border-color:var(--B);background:var(--BL)}
+.ck input{display:none}.ck.on{border-color:var(--B);background:var(--BL)}
+.ck-box{width:16px;height:16px;border:2px solid var(--bd);border-radius:3px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.ck.on .ck-box{background:var(--B);border-color:var(--B)}
+.ck-box svg{display:none}.ck.on .ck-box svg{display:block}
+.ck span{font-size:12px;font-weight:500}
+.rd-g{display:flex;gap:8px}
+.rd{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:.2s;background:#FAFAFA;flex:1;justify-content:center}
+.rd:hover{border-color:var(--B)}.rd.on{border-color:var(--B);background:var(--BL)}
+.rd input{display:none}
+.rd-dot{width:14px;height:14px;border:2px solid var(--bd);border-radius:50%;position:relative;transition:.2s}
+.rd.on .rd-dot{border-color:var(--B)}.rd.on .rd-dot::after{content:'';position:absolute;width:6px;height:6px;background:var(--B);border-radius:50%;top:2px;left:2px}
+.rd span{font-size:12px;font-weight:500}
+/* AI */
+.ai-cd{background:linear-gradient(135deg,#F0F7FF,#EEF8F7);border:1.5px solid #C6DEFF;border-radius:var(--r);padding:20px;margin-bottom:12px}
+.ai-cd h3{font-size:14px;font-weight:700;color:var(--B);display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.ai-cd>p{font-size:12px;color:var(--t2);margin-bottom:14px}
+.ai-res{background:#fff;border-radius:var(--rs);padding:16px;border:1px solid #D6E8FF;min-height:50px}
+.ai-res.ld{display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:12px}
+.pkg{padding:10px 0;border-bottom:1px solid #F0F0F0}.pkg:last-child{border-bottom:none}
+.pkg-name{font-size:13px;font-weight:700}.pkg-price{font-size:12px;color:var(--B);font-weight:600}
+.pkg-reason{font-size:11px;color:var(--t2);margin-top:3px}
+.ai-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-right:4px}
+.ai-tag-kt{background:#DCFCE7;color:#166534}.ai-tag-sk{background:#FFF7ED;color:#9A3412}.ai-tag-lg{background:#F3E8FF;color:#7C3AED}
+.ai-btn{display:inline-flex;align-items:center;gap:5px;padding:9px 18px;background:var(--B);color:#fff;border:none;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:.2s}
+.ai-btn:hover{background:#0055AA}.ai-btn:disabled{background:#CCC;cursor:not-allowed}
+/* Banner */
+.ban{background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border:1px solid #FDE68A;border-radius:var(--rs);padding:10px 14px;display:flex;align-items:flex-start;gap:7px;margin-bottom:14px}
+.ban p{font-size:12px;color:#92400E;line-height:1.5}.ban strong{font-weight:600}
+/* Privacy */
+.priv{background:#F9FAFB;border:1px solid var(--bd);border-radius:var(--rs);padding:16px;margin-bottom:14px}
+.priv h3{font-size:12px;font-weight:700;margin-bottom:8px}
+.priv ul{list-style:none}.priv li{font-size:11px;color:var(--t2);padding:2px 0 2px 12px;position:relative;line-height:1.5}.priv li::before{content:'·';position:absolute;left:3px}
+/* Signature */
+.sig-wrap{margin-top:14px}
+.sig-wrap h4{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sig-canvas-wrap{border:2px solid var(--bd);border-radius:var(--rs);background:#fff;position:relative;touch-action:none}
+.sig-canvas-wrap canvas{display:block;width:100%;height:160px;border-radius:var(--rs);cursor:crosshair}
+.sig-placeholder{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--t3);font-size:12px;pointer-events:none;transition:.2s}
+.sig-canvas-wrap.has-sig .sig-placeholder{opacity:0}
+.sig-actions{display:flex;gap:8px;margin-top:8px}
+.sig-actions button{padding:6px 14px;border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--t2);font-family:'Noto Sans KR',sans-serif}
+.sig-actions button:hover{border-color:var(--B);color:var(--B)}
+/* Consent */
+.consent{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:.3s}
+.consent.yes{border-color:var(--ok);background:#F0FDF4}
+.tgl{width:42px;height:22px;background:#D1D5DB;border-radius:11px;position:relative;transition:.3s;flex-shrink:0}
+.consent.yes .tgl{background:var(--ok)}
+.tgl::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.consent.yes .tgl::after{left:22px}
+.consent-txt{font-size:12px;font-weight:600;color:var(--t2)}.consent.yes .consent-txt{color:#166534}
+/* Buttons */
+.btn-row{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}
+.btn{padding:10px 22px;border-radius:var(--rs);font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:.2s;border:none;display:flex;align-items:center;gap:4px}
+.btn-g{background:#fff;color:var(--t2);border:1.5px solid var(--bd)}.btn-g:hover{border-color:#CCC}
+.btn-p{background:var(--B);color:#fff;box-shadow:0 2px 8px rgba(0,102,204,.2)}.btn-p:hover{background:#0055AA;transform:translateY(-1px)}.btn-p:disabled{background:#CCC;box-shadow:none;cursor:not-allowed;transform:none}
+.btn-r{background:var(--R);color:#fff;box-shadow:0 2px 8px rgba(228,0,43,.2);padding:12px 28px;font-size:14px}.btn-r:hover{background:#C5001F;transform:translateY(-1px)}
+/* Success */
+.success{text-align:center;padding:40px 16px}
+.success-ico{width:68px;height:68px;background:#F0FDF4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px;animation:si .5s ease}
+@keyframes si{from{transform:scale(0)}to{transform:scale(1)}}
+.success h2{font-size:18px;font-weight:700;margin-bottom:4px}.success p{color:var(--t2);font-size:12px;max-width:360px;margin:0 auto 16px}
+.rcpt{background:#F9FAFB;border:1px solid var(--bd);border-radius:var(--r);padding:18px;max-width:440px;margin:0 auto;text-align:left}
+.rcpt-r{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F0F0F0;font-size:11.5px}.rcpt-r:last-child{border-bottom:none}
+.rcpt-r .l{color:var(--t3)}.rcpt-r .v{font-weight:600;text-align:right;max-width:55%}
+/* Footer */
+.ftr{max-width:880px;margin:0 auto;padding:14px 24px 32px;text-align:center}
+.ftr p{font-size:10px;color:var(--t3);line-height:1.7}
+@media(max-width:640px){.hdr-in{padding:18px 14px}.hdr h1{font-size:19px}.prog-w,.main{padding-left:12px;padding-right:12px}.prog{padding:10px 12px}.stp-l{display:none}.fg{grid-template-columns:1fr}.cd{padding:16px}.rd-g{flex-direction:column}.ck-grid{grid-template-columns:1fr 1fr}.btn-row{flex-direction:column}.btn{justify-content:center}.role-grid{grid-template-columns:1fr}.site-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="hdr-in">
+  <div class="hdr-badge"><span class="dot"></span>허브링크(주) 통신복지 CRM v4</div>
+  <h1>서비스 이용 <em>상담 신청서</em></h1>
+  <p class="hdr-sub" id="hdrSub">접수자 정보를 먼저 선택해 주세요</p>
+  <div class="site-ind" id="siteInd" style="display:none">📍 <span id="siteLbl"></span></div>
+</div></div>
+
+<div class="prog-w"><div class="prog" id="progBar">
+  <div class="stp on" data-s="1"><div class="stp-n">1</div><span class="stp-l">접수자</span></div><div class="stp-line"></div>
+  <div class="stp" data-s="2"><div class="stp-n">2</div><span class="stp-l">사업장</span></div><div class="stp-line"></div>
+  <div class="stp" data-s="3"><div class="stp-n">3</div><span class="stp-l">고객정보</span></div><div class="stp-line"></div>
+  <div class="stp" data-s="4"><div class="stp-n">4</div><span class="stp-l">기존정보</span></div><div class="stp-line"></div>
+  <div class="stp" data-s="5"><div class="stp-n">5</div><span class="stp-l">신규설치</span></div><div class="stp-line"></div>
+  <div class="stp" data-s="6"><div class="stp-n">6</div><span class="stp-l">AI추천</span></div><div class="stp-line"></div>
+  <div class="stp" data-s="7"><div class="stp-n">7</div><span class="stp-l">서명·접수</span></div>
+</div></div>
+
+<div class="main">
+
+<!-- S1: 접수자 역할 -->
+<div class="sec on" id="sec-1"><div class="cd">
+  <div class="cd-t"><div class="cd-ico" style="background:#EFF6FF;color:var(--B)">👤</div><h2>접수자 정보 <small>Agent Role & Info</small></h2></div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:14px">상담 접수를 진행하는 분의 역할을 선택해 주세요. <strong>벤치마킹:</strong> Salesforce CRM의 역할 기반 접근제어(RBAC)를 참고하여 설계했습니다.</p>
+  <div class="role-grid" id="roleGrid">
+    <div class="role-card" onclick="pickRole(this,'hublink')" data-role="hublink"><div class="r-ico">🏢</div><h3>허브링크 직원</h3><p>설비사·관리자·CEO</p></div>
+    <div class="role-card" onclick="pickRole(this,'linkpeople')" data-role="linkpeople"><div class="r-ico">🤝</div><h3>링크피플 직원</h3><p>상담원·영업사원</p></div>
+    <div class="role-card" onclick="pickRole(this,'dealer')" data-role="dealer"><div class="r-ico">🏪</div><h3>외부 대리점</h3><p>제휴 판매 대리점</p></div>
+  </div>
+  <div class="fg" style="margin-top:14px">
+    <div class="fi"><label><span class="req">*</span> 접수자 성명</label><input type="text" id="agentName" placeholder="이름 입력"></div>
+    <div class="fi"><label><span class="req">*</span> 소속</label><input type="text" id="agentOrg" placeholder="소속 회사/부서명"></div>
+  </div>
+</div>
+<div class="btn-row"><button class="btn btn-p" id="btnS1" onclick="go(2)" disabled>다음 →</button></div></div>
+
+<!-- S2: 사업장 -->
+<div class="sec" id="sec-2"><div class="cd">
+  <div class="cd-t"><div class="cd-ico" style="background:#ECFDF5;color:var(--T)">🏢</div><h2>사업장 선택 <small>Select Building</small></h2></div>
+  <div class="site-grid" id="siteGrid"></div>
+</div>
+<div class="btn-row"><button class="btn btn-g" onclick="go(1)">← 이전</button><button class="btn btn-p" id="btnS2" onclick="go(3)" disabled>다음 →</button></div></div>
+
+<!-- S3: 고객정보 -->
+<div class="sec" id="sec-3"><div class="cd">
+  <div class="cd-t"><div class="cd-ico" style="background:#FEF3C7;color:#D97706">📋</div><h2>고객 정보 <small>Customer Info</small></h2></div>
+  <div class="fg">
+    <div class="fi"><label><span class="req">*</span> 사업자명</label><input type="text" id="bizName" placeholder="(주)회사명"></div>
+    <div class="fi"><label>사업자등록번호</label><input type="text" id="bizNum" placeholder="000-00-00000" maxlength="12"></div>
+    <div class="fi"><label><span class="req">*</span> 담당자명</label><input type="text" id="contactName" placeholder="성명"></div>
+    <div class="fi"><label><span class="req">*</span> 연락처(HP)</label><input type="tel" id="contactPhone" placeholder="010-0000-0000" maxlength="13"></div>
+  </div>
+</div>
+<div class="btn-row"><button class="btn btn-g" onclick="go(2)">← 이전</button><button class="btn btn-p" onclick="go(4)">다음 →</button></div></div>
+
+<!-- S4: 기존정보 -->
+<div class="sec" id="sec-4"><div class="cd">
+  <div class="cd-t"><div class="cd-ico" style="background:#FEE2E2;color:var(--R)">📡</div><h2>기존 사용 정보 <small>Current Service</small></h2></div>
+  <div class="fg">
+    <div class="fi full"><label>건물명(현재)</label><input type="text" id="curBuilding" readonly style="background:var(--BL);font-weight:600;color:var(--B)"></div>
+    <div class="fi"><label>소재지</label><input type="text" id="curAddr" placeholder="시/도/구"></div>
+    <div class="fi"><label>인터넷 통신사</label><select id="curISP"><option value="">선택</option><option>KT</option><option>SK브로드밴드</option><option>LG유플러스</option><option>기타</option></select></div>
+    <div class="fi"><label>구내회선</label><div class="rd-g"><div class="rd" onclick="pickRd(this)"><input type="radio" name="inhouse" value="구내회선"><div class="rd-dot"></div><span>구내회선</span></div><div class="rd" onclick="pickRd(this)"><input type="radio" name="inhouse" value="아님"><div class="rd-dot"></div><span>아님</span></div></div></div>
+    <div class="fi"><label>사용속도</label><div class="rd-g"><div class="rd" onclick="pickRd(this)"><input type="radio" name="speed" value="1G"><div class="rd-dot"></div><span>1G</span></div><div class="rd" onclick="pickRd(this)"><input type="radio" name="speed" value="500M"><div class="rd-dot"></div><span>500M</span></div><div class="rd" onclick="pickRd(this)"><input type="radio" name="speed" value="100M"><div class="rd-dot"></div><span>100M</span></div></div></div>
+    <div class="fi"><label>전화기</label><input type="number" id="phoneCount" placeholder="대" min="0"></div>
+    <div class="fi"><label>직원수(PC)</label><input type="number" id="pcCount" placeholder="명" min="0"></div>
+    <div class="fi"><label><span class="req">*</span> 이사예정일</label><input type="date" id="moveDate"></div>
+  </div>
+</div>
+<div class="btn-row"><button class="btn btn-g" onclick="go(3)">← 이전</button><button class="btn btn-p" onclick="go(5)">다음 →</button></div></div>
+
+<!-- S5: 신규설치 -->
+<div class="sec" id="sec-5"><div class="cd">
+  <div class="cd-t"><div class="cd-ico" style="background:#ECFDF5;color:var(--T)">🏗️</div><h2>신규 설치 정보 <small>New Installation</small></h2></div>
+  <div class="ban"><span>💡</span><p><strong>제휴 혜택:</strong> 이전설치비 면제 + 위약금 면제 + 랜공사 무상. 기존 통신사 무관</p></div>
+  <div class="fg">
+    <div class="fi full"><label><span class="req">*</span> 건물명(신규)</label><input type="text" id="newBuilding" placeholder="이전할 건물"></div>
+    <div class="fi"><label>건물층수</label><input type="text" id="newFloor" placeholder="예: 5층/3"></div>
+    <div class="fi full"><label><span class="req">*</span> 주소지(신규)</label><input type="text" id="newAddr" placeholder="전체 주소"></div>
+  </div>
+  <div class="fi full" style="margin-top:14px">
+    <label style="margin-bottom:6px"><span class="req">*</span> 필요 서비스</label>
+    <div class="ck-grid">
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="인터넷"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>인터넷</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="전화"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>전화(Centrex)</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="TV"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>TV</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="FAX"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>FAX</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="Wifi"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>Wifi</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="CCTV"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>CCTV</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="출입통제"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>출입통제</span></div>
+      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="구내공사"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>구내공사</span></div>
+    </div>
+  </div>
+  <div class="fi full" style="margin-top:12px"><label>기타 요청</label><textarea id="etcRequest" rows="2" placeholder="추가 요청사항"></textarea></div>
+</div>
+<div class="btn-row"><button class="btn btn-g" onclick="go(4)">← 이전</button><button class="btn btn-p" onclick="go(6)">AI 추천 →</button></div></div>
+
+<!-- S6: AI 추천 (다중통신사) -->
+<div class="sec" id="sec-6">
+  <div class="ai-cd">
+    <h3>🤖 Gemini AI 맞춤 상품 추천</h3>
+    <p>기업 정보 기반으로 <strong>KT 우선 추천</strong> + 기존 통신사 대안을 함께 분석합니다. <em style="font-size:11px;color:var(--t3)">벤치마킹: Salesforce Einstein AI 추천 엔진</em></p>
+    <button class="ai-btn" id="aiBtn" onclick="getAI()">✨ AI 추천 받기</button>
+    <div class="ai-res" id="aiRes" style="display:none"></div>
+  </div>
+  <div class="btn-row"><button class="btn btn-g" onclick="go(5)">← 이전</button><button class="btn btn-p" onclick="go(7)">서명·접수 →</button></div>
+</div>
+
+<!-- S7: 동의 + 서명 + 접수 -->
+<div class="sec" id="sec-7"><div class="cd">
+  <div class="cd-t"><div class="cd-ico" style="background:#FEF2F2;color:var(--R)">🔒</div><h2>개인정보 동의 및 전자서명 <small>Consent & Signature</small></h2></div>
+  <div class="priv"><h3>개인정보 수집·이용 안내</h3><ul>
+    <li><strong>수집항목:</strong> 회사명, 성명, 연락처, 주소, 통신사 정보</li>
+    <li><strong>수집목적:</strong> 서비스 가입 상담, 상품 안내, 요금 설계</li>
+    <li><strong>보유기간:</strong> 상담 보호조 6개월</li>
+    <li><strong>동의거부:</strong> 거부 시 상담 이용 제한</li>
+    <li><strong>정보제공자:</strong> (주)링크피플 [107-86-41233]</li>
+  </ul></div>
+  <div class="consent" id="consentT" onclick="tConsent()"><div class="tgl"></div><span class="consent-txt">개인정보 수집·이용에 동의합니다.</span></div>
+
+  <!-- ★ 전자서명 (signature_pad 라이브러리) -->
+  <div class="sig-wrap">
+    <h4>✍️ 고객 자필 서명 <span style="font-size:10px;font-weight:400;color:var(--t3)">벤치마킹: DocuSign / 모두싸인 전자서명 UX</span></h4>
+    <div class="sig-canvas-wrap" id="sigWrap">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-placeholder">이 영역에 서명해 주세요</div>
+    </div>
+    <div class="sig-actions">
+      <button onclick="clearSig()">🗑️ 지우기</button>
+      <button onclick="undoSig()">↩️ 되돌리기</button>
+    </div>
+  </div>
+
+  <div class="fg" style="margin-top:14px">
+    <div class="fi"><label>작성일자</label><input type="date" id="signDate"></div>
+    <div class="fi"><label>건물담당자(확인자)</label><input type="text" id="verifier" placeholder="설비사/관리실 직원명"></div>
+  </div>
+</div>
+<div class="btn-row">
+  <button class="btn btn-g" onclick="go(6)">← 이전</button>
+  <button class="btn btn-p" onclick="showSum()">미리보기</button>
+  <button class="btn btn-r" onclick="submit()" id="subBtn" disabled>✓ 접수 완료</button>
+</div></div>
+
+<!-- Success -->
+<div class="sec" id="sec-ok"><div class="cd"><div class="success">
+  <div class="success-ico">✅</div>
+  <h2>접수 완료!</h2>
+  <p>링크피플 상담원이 <strong>영업일 1일 이내</strong> 연락드립니다.<br><span style="font-size:11px;color:var(--ok)">linkin@tcodi.kr로 접수 내용이 자동 발송되었습니다.</span></p>
+  <div class="rcpt" id="rcptBox"></div>
+  <div class="btn-row" style="justify-content:center;margin-top:16px">
+    <button class="btn btn-p" onclick="resetAll()">🔄 새 신청서</button>
+    <button class="btn btn-g" onclick="window.print()">🖨️ 인쇄</button>
+  </div>
+</div></div></div>
+
+</div>
+
+<div class="ftr"><p>허브링크(주) × 링크피플 통신복지 CRM v4 | <span id="ftrC"></span></p></div>
+
+<script>
+// ═══ CONFIG ═══
+const APPS_SCRIPT_URL = "https://script.googleusercontent.com/a/macros/hublink.co.kr/echo?user_content_key=AY5xjrS7p4Afo0Xw4FZ0jlTMTKT5zRRw3fT7rUZJYeVAxuVPZCSlO-HpmT0gfbUeIsK1Jxz2aHf1kgcME2Yf9kqSJC3iNo4CjoBCVd2qJRozJqLCrfIclQB_YjIdLdixrk5cF8QIFGWUHkqzMY88sgBLK52zi-f9ZQjsaGJ2w9oLL9UYGbqSu_SbmJTdnIBbhGL0Su1iDrRSn07CYYqJhpkSvrUgBDV2Ubk6-8jUUU-YLY-OMFOgB3k8nk98EA8Y-IcxXNJs3aVATvGW4mCECvAuSGo1xR-XLtdrU-MjEAvj-HEc4SWCGYszMqYSnYcG7Q&lib=Mgn7zDYjMN4lEHu2CtG-GUjrlXFeYo0_T"; // Apps Script 배포 URL 입력
+const SITES = {
+  dasan: { code:"dasan", name:"다산현대프리미어캠퍼스", addr:"경기 남양주시 다산중앙로 105", phone:"031-552-5600", status:"active", start:"2026-03-16" },
+};
+
+// ═══ STATE ═══
+let step=1, site=null, role=null, consented=false, aiData={rec:"",reason:""}, sigPad=null;
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('signDate').value=new Date().toISOString().slice(0,10);
+  renderSites();
+  initSigPad();
+  setupFmt();
+});
+
+function initSigPad(){
+  const canvas=document.getElementById('sigCanvas');
+  const wrap=document.getElementById('sigWrap');
+  // Set proper resolution
+  const ratio=Math.max(window.devicePixelRatio||1,1);
+  canvas.width=canvas.offsetWidth*ratio;
+  canvas.height=160*ratio;
+  canvas.style.height='160px';
+  canvas.getContext('2d').scale(ratio,ratio);
+
+  sigPad=new SignaturePad(canvas,{
+    minWidth:1.5,maxWidth:3,penColor:'#16162A',
+    backgroundColor:'rgba(255,255,255,0)',
+    onBegin:()=>wrap.classList.add('has-sig'),
+  });
+}
+
+// ═══ ROLE ═══
+function pickRole(el,r){
+  role=r;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('btnS1').disabled=false;
+  // Auto-fill org based on role
+  const orgField=document.getElementById('agentOrg');
+  if(r==='hublink'&&!orgField.value) orgField.value='허브링크(주)';
+  if(r==='linkpeople'&&!orgField.value) orgField.value='(주)링크피플';
+}
+
+// ═══ SITES ═══
+function renderSites(){
+  const g=document.getElementById('siteGrid'); g.innerHTML='';
+  for(const[k,s] of Object.entries(SITES)){
+    const on=s.status==='active';
+    const d=document.createElement('div'); d.className='site-card'; d.dataset.code=k;
+    d.innerHTML=`<h3>${s.name}</h3><p>📍 ${s.addr}<br>📞 ${s.phone}</p><span class="tag ${on?'tag-on':'tag-soon'}">${on?'운영중':'준비중'}</span>`;
+    if(on) d.onclick=()=>pickSite(k); else{d.style.opacity='.5';d.style.cursor='not-allowed'}
+    g.appendChild(d);
+  }
+}
+function pickSite(k){
+  site=SITES[k]; site._code=k;
+  document.querySelectorAll('.site-card').forEach(c=>c.classList.remove('sel'));
+  document.querySelector(`.site-card[data-code="${k}"]`).classList.add('sel');
+  document.getElementById('btnS2').disabled=false;
+  document.getElementById('hdrSub').textContent=`${site.name} · 통신복지 상담 접수`;
+  document.getElementById('siteInd').style.display='inline-flex';
+  document.getElementById('siteLbl').textContent=site.name;
+  document.getElementById('curBuilding').value=site.name;
+  document.getElementById('ftrC').textContent=`${site.phone} | ${site.start}~`;
+}
+
+// ═══ NAV ═══
+function go(n){
+  if(n>step&&step===3&&!valS3()) return;
+  step=n;
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-'+n).classList.add('on');
+  document.querySelectorAll('.stp').forEach((s,i)=>{s.classList.remove('on','ok');if(i+1<n)s.classList.add('ok');if(i+1===n)s.classList.add('on')});
+  document.querySelectorAll('.stp-line').forEach((l,i)=>l.classList.toggle('ok',i+1<n));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===7) setTimeout(()=>initSigPad(),100); // re-init on step show
+}
+function valS3(){
+  if(!document.getElementById('bizName').value.trim()||!document.getElementById('contactName').value.trim()||!document.getElementById('contactPhone').value.trim()){alert('사업자명, 담당자명, 연락처 필수');return false}return true;
+}
+
+// ═══ CONTROLS ═══
+function pickRd(el){el.closest('.rd-g').querySelectorAll('.rd').forEach(r=>r.classList.remove('on'));el.classList.add('on');el.querySelector('input').checked=true}
+function tCk(el){el.classList.toggle('on');el.querySelector('input').checked=el.classList.contains('on')}
+function tConsent(){consented=!consented;document.getElementById('consentT').classList.toggle('yes',consented);document.getElementById('subBtn').disabled=!(consented&&sigPad&&!sigPad.isEmpty())}
+function clearSig(){sigPad.clear();document.getElementById('sigWrap').classList.remove('has-sig');document.getElementById('subBtn').disabled=true}
+function undoSig(){const d=sigPad.toData();if(d.length){d.pop();sigPad.fromData(d);if(!d.length)document.getElementById('sigWrap').classList.remove('has-sig')}}
+function setupFmt(){
+  document.getElementById('contactPhone').addEventListener('input',function(e){let v=e.target.value.replace(/[^0-9]/g,'');if(v.length>3&&v.length<=7)v=v.slice(0,3)+'-'+v.slice(3);else if(v.length>7)v=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);e.target.value=v});
+  document.getElementById('bizNum').addEventListener('input',function(e){let v=e.target.value.replace(/[^0-9]/g,'');if(v.length>3&&v.length<=5)v=v.slice(0,3)+'-'+v.slice(3);else if(v.length>5)v=v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5,10);e.target.value=v});
+  // Enable submit when both consent & signature
+  document.getElementById('sigCanvas').addEventListener('pointerup',()=>{
+    setTimeout(()=>{document.getElementById('subBtn').disabled=!(consented&&sigPad&&!sigPad.isEmpty())},100);
+  });
+}
+
+// ═══ AI (via Apps Script proxy — API키 서버보관) ═══
+async function getAI(){
+  const btn=document.getElementById('aiBtn'),res=document.getElementById('aiRes');
+  btn.disabled=true;btn.textContent='⏳ 분석중...';
+  res.style.display='block';res.className='ai-res ld';res.textContent='Gemini AI 분석 중...';
+  const svcs=[],isp=document.getElementById('curISP').value||'미선택';
+  document.querySelectorAll('.ck.on span').forEach(s=>svcs.push(s.textContent));
+  const rdV=n=>{const el=document.querySelector(`input[name="${n}"]:checked`);return el?el.value:''};
+
+  // 다중통신사 프롬프트: KT 우선 + 기존통신사 대안
+  const prompt=`당신은 한국 기업용 통신 상품 전문 컨설턴트입니다.
+
+[기업 정보]
+- 직원수(PC): ${document.getElementById('pcCount').value||'미입력'}명
+- 전화기: ${document.getElementById('phoneCount').value||'0'}대
+- 기존 통신사: ${isp}
+- 기존 속도: ${rdV('speed')||'미선택'}
+- 필요 서비스: ${svcs.join(', ')||'미선택'}
+
+[KT 상품 (3년약정/VAT포함)]
+- 오피스넷 에센스 1G: 월 49,500원 (PC무제한, FTTH-R)
+- 오피스넷 베이직 500M: 월 44,000원
+- 오피스넷 슬림 100M: 월 30,800원
+- Centrex: 월 2,750원/회선
+- 고정IP: 월 55,000원
+- 기가아이즈(CCTV): 월 13,200원~
+
+${isp!=='KT'&&isp!=='미선택'?`[${isp} 참고 상품]
+- ${isp} 기업인터넷 1G: 월 약 49,500원
+- ${isp} 기업인터넷 500M: 월 약 44,000원
+- ${isp} 기업전화: 월 약 3,000원/회선
+※ ${isp} 상품은 참고용이며, 정확한 요금은 상담 시 확인합니다.`:''}
+
+[응답규칙]
+1. KT 패키지를 최우선으로 추천 (carrier:"KT")
+${isp!=='KT'&&isp!=='미선택'?`2. 기존 통신사(${isp}) 대안 패키지도 1개 추천 (carrier:"${isp}")
+3. 기존 ${isp} 사용자가 KT로 전환 시 혜택(위약금면제+이전설치비면제) 강조`:'2. KT 대안 패키지 1개 추가 추천'}
+
+[JSON 형식으로만 응답]
+{"packages":[{"carrier":"통신사명","name":"패키지명","items":["상품-월XX원"],"monthly_total":"월합계","reason":"추천사유"}],"overall_reason":"종합분석 2~3문장","tip":"절약팁"}`;
+
+  try{
+    let text='';
+    if(APPS_SCRIPT_URL){
+      const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'gemini',prompt})});
+      const d=await r.json();
+      text=d.text||'';
+    } else {
+      // 직접 호출 fallback (개발용)
+      res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ Apps Script URL 미설정. 배포 후 사용해 주세요.</p>';
+      btn.disabled=false;btn.textContent='✨ AI 추천 받기';return;
+    }
+    const m=text.match(/\{[\s\S]*\}/);
+    if(m){const rec=JSON.parse(m[0]);renderAI(rec);aiData.rec=rec.packages?.map(p=>`[${p.carrier}]${p.name}`).join(' / ')||'';aiData.reason=rec.overall_reason||''}
+    else{res.className='ai-res';res.innerHTML=`<p style="font-size:12px;color:var(--t2);white-space:pre-wrap">${text}</p>`}
+  }catch(e){res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ AI 오류. 상담원이 직접 안내합니다.</p>'}
+  btn.disabled=false;btn.textContent='🔄 다시 추천';
+}
+
+function renderAI(rec){
+  const res=document.getElementById('aiRes');res.className='ai-res';let h='';
+  const tagClass={'KT':'ai-tag-kt','SK브로드밴드':'ai-tag-sk','LG유플러스':'ai-tag-lg'};
+  (rec.packages||[]).forEach((p,i)=>{
+    const tc=tagClass[p.carrier]||'ai-tag-kt';
+    h+=`<div class="pkg"><div class="pkg-name"><span class="ai-tag ${tc}">${p.carrier}</span>${i===0?'<span class="ai-tag ai-tag-kt">최적추천</span>':''}${p.name}</div>
+    <div style="margin:4px 0">${(p.items||[]).map(it=>`<span style="display:inline-block;font-size:11px;color:var(--t2);background:#F5F5F5;padding:1px 6px;border-radius:3px;margin:1px 3px 1px 0">${it}</span>`).join('')}</div>
+    <div class="pkg-price">${p.monthly_total||''}</div><div class="pkg-reason">${p.reason||''}</div></div>`;
+  });
+  if(rec.overall_reason)h+=`<div style="margin-top:10px;padding:8px 12px;background:#F0F7FF;border-radius:5px;font-size:11px;color:var(--t2)"><strong style="color:var(--B)">📊</strong> ${rec.overall_reason}</div>`;
+  if(rec.tip)h+=`<div style="margin-top:6px;font-size:11px;color:var(--T)">💡 ${rec.tip}</div>`;
+  res.innerHTML=h;
+}
+
+// ═══ SUBMIT ═══
+function collect(){
+  const svcs=[];document.querySelectorAll('.ck.on span').forEach(s=>svcs.push(s.textContent));
+  const rv=n=>{const e=document.querySelector(`input[name="${n}"]:checked`);return e?e.value:''};
+  return{
+    action:'submit',siteCode:site?._code||'',siteName:site?.name||'',
+    agentRole:role||'',agentName:document.getElementById('agentName').value,agentOrg:document.getElementById('agentOrg').value,
+    bizName:document.getElementById('bizName').value,bizNum:document.getElementById('bizNum').value,
+    contactName:document.getElementById('contactName').value,contactPhone:document.getElementById('contactPhone').value,
+    curBuilding:document.getElementById('curBuilding').value,curAddr:document.getElementById('curAddr').value,
+    curISP:document.getElementById('curISP').value,inhouse:rv('inhouse'),speed:rv('speed'),
+    phoneCount:document.getElementById('phoneCount').value,pcCount:document.getElementById('pcCount').value,
+    moveDate:document.getElementById('moveDate').value,
+    newBuilding:document.getElementById('newBuilding').value,newFloor:document.getElementById('newFloor').value,
+    newAddr:document.getElementById('newAddr').value,services:svcs.join(', '),
+    etcRequest:document.getElementById('etcRequest').value,
+    aiRecommendation:aiData.rec,aiReason:aiData.reason,
+    consent:consented,signatureData:sigPad&&!sigPad.isEmpty()?sigPad.toDataURL('image/png'):'',
+    signDate:document.getElementById('signDate').value,verifier:document.getElementById('verifier').value,
+  };
+}
+
+function showSum(){
+  // Quick summary display (reuse receipt area temporarily)
+  const d=collect();
+  alert(`접수 미리보기:\n사업장: ${d.siteName}\n사업자: ${d.bizName}\n담당자: ${d.contactName} / ${d.contactPhone}\n이사: ${d.moveDate||'미정'}\n서비스: ${d.services}\nAI: ${d.aiRecommendation||'미사용'}\n서명: ${d.signatureData?'있음':'없음'}`);
+}
+
+async function submit(){
+  if(!consented){alert('동의 필요');return}
+  if(sigPad.isEmpty()){alert('서명을 입력해 주세요.');return}
+  const btn=document.getElementById('subBtn');btn.disabled=true;btn.innerHTML='⏳ 접수중...';
+  const fd=collect();
+  let rid='HB-'+Date.now().toString(36).toUpperCase(), sync='오프라인';
+  if(APPS_SCRIPT_URL){
+    try{const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fd)});const j=await r.json();if(j.receiptId)rid=j.receiptId;sync='✅ Sheets저장 + 이메일발송'}catch(e){sync='⚠️ 오프라인'}
+  }
+  const rcpt={'접수번호':rid,'접수일시':new Date().toLocaleString('ko-KR'),'사업장':fd.siteName,'접수자':`${fd.agentRole} / ${fd.agentName}`,'사업자명':fd.bizName,'담당자':fd.contactName+' / '+fd.contactPhone,'서비스':fd.services||'-','AI추천':fd.aiRecommendation||'-','서명':'✅ 전자서명완료','저장':sync};
+  let h='';for(const[k,v] of Object.entries(rcpt))h+=`<div class="rcpt-r"><span class="l">${k}</span><span class="v">${v}</span></div>`;
+  document.getElementById('rcptBox').innerHTML=h;
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-ok').classList.add('on');
+  document.querySelectorAll('.stp').forEach(s=>{s.classList.remove('on');s.classList.add('ok')});
+  document.querySelectorAll('.stp-line').forEach(l=>l.classList.add('ok'));
+}
+
+function resetAll(){
+  document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i=>{if(i.id!=='curBuilding')i.value=''});
+  document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
+  document.querySelectorAll('textarea').forEach(t=>t.value='');
+  document.querySelectorAll('.rd,.ck,.site-card,.role-card').forEach(e=>e.classList.remove('on','sel'));
+  document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(i=>i.checked=false);
+  consented=false;site=null;role=null;aiData={rec:'',reason:''};
+  document.getElementById('consentT').classList.remove('yes');
+  ['subBtn','btnS1','btnS2'].forEach(id=>document.getElementById(id).disabled=true);
+  document.getElementById('siteInd').style.display='none';
+  document.getElementById('aiRes').style.display='none';
+  if(sigPad)sigPad.clear();
+  document.getElementById('sigWrap').classList.remove('has-sig');
+  document.getElementById('signDate').value=new Date().toISOString().slice(0,10);
+  step=1;go(1);
+}
+</script>
+</body>
+</html>

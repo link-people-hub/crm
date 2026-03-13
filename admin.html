@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>허브링크 CRM | 관리자 대시보드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{--D:#16162A;--B:#0066CC;--BL:#E8F2FF;--R:#E4002B;--T:#00A89D;--ok:#16A34A;--warn:#EA580C;--bg:#F3F4F6;--cd:#FFF;--bd:#E5E7EB;--tx:#111827;--t2:#6B7280;--t3:#9CA3AF;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+/* NAV */
+.nav{background:var(--D);color:#fff;padding:0 24px;display:flex;align-items:center;height:56px;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:16px;font-weight:700;letter-spacing:-.5px;margin-right:auto;display:flex;align-items:center;gap:8px}
+.nav-logo em{color:var(--R);font-style:normal}
+.nav-links{display:flex;gap:4px}
+.nav-link{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:.2s;text-decoration:none}
+.nav-link:hover,.nav-link.on{background:rgba(255,255,255,.1);color:#fff}
+/* CONTAINER */
+.wrap{max-width:1280px;margin:0 auto;padding:24px}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat{background:var(--cd);border-radius:var(--r);padding:20px;border:1px solid var(--bd)}
+.stat-label{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.stat-val{font-size:28px;font-weight:900;letter-spacing:-1px}
+.stat-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.stat-blue .stat-val{color:var(--B)}.stat-green .stat-val{color:var(--ok)}.stat-red .stat-val{color:var(--R)}.stat-teal .stat-val{color:var(--T)}
+/* TOOLBAR */
+.toolbar{background:var(--cd);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid var(--bd)}
+.search-box{flex:1;min-width:200px;position:relative}
+.search-box input{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px 9px 36px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:.2s}
+.search-box input:focus{border-color:var(--B);box-shadow:0 0 0 3px rgba(0,102,204,.06)}
+.search-box::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px}
+.filter-sel{border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:12px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E") no-repeat right 10px center;padding-right:28px;outline:none}
+.tbtn{padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--tx);font-family:'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:4px;transition:.2s}
+.tbtn:hover{border-color:var(--B);color:var(--B)}.tbtn-p{background:var(--B);color:#fff;border-color:var(--B)}.tbtn-p:hover{background:#0055AA}
+/* TABLE */
+.table-wrap{background:var(--cd);border-radius:var(--r);border:1px solid var(--bd);overflow:hidden}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:1200px}
+thead{background:#F9FAFB;position:sticky;top:0}
+th{padding:12px 14px;text-align:left;font-weight:600;color:var(--t2);border-bottom:2px solid var(--bd);font-size:11px;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--B)}
+td{padding:10px 14px;border-bottom:1px solid #F3F4F6;vertical-align:middle}
+tr:hover td{background:#F9FAFB}
+.status{display:inline-block;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;white-space:nowrap}
+.st-접수완료{background:#DCFCE7;color:#166534}.st-상담중{background:#DBEAFE;color:#1E40AF}.st-개통완료{background:#E0E7FF;color:#3730A3}.st-취소{background:#FEE2E2;color:#991B1B}.st-보류{background:#FEF3C7;color:#92400E}
+.sig-link{color:var(--B);text-decoration:none;font-weight:500}.sig-link:hover{text-decoration:underline}
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-ico{font-size:48px;margin-bottom:12px}
+.empty p{font-size:14px}
+/* PAGINATION */
+.pagi{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;font-size:12px;color:var(--t2)}
+.pagi-btns{display:flex;gap:4px}
+.pagi-btn{padding:6px 12px;border:1px solid var(--bd);border-radius:6px;cursor:pointer;background:#fff;font-size:11px;font-family:'Noto Sans KR',sans-serif}
+.pagi-btn:hover{border-color:var(--B);color:var(--B)}.pagi-btn.on{background:var(--B);color:#fff;border-color:var(--B)}
+/* LOADING */
+.loading{text-align:center;padding:60px;color:var(--t3)}
+.spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--B);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* RESPONSIVE */
+@media(max-width:768px){.wrap{padding:12px}.stats{grid-template-columns:1fr 1fr}.toolbar{flex-direction:column}.search-box{width:100%}}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-logo">📊 허브링크 <em>CRM</em> 대시보드</div>
+  <div class="nav-links">
+    <a class="nav-link on" href="#">대시보드</a>
+    <a class="nav-link" href="#" onclick="window.open(FORM_URL||'#')">신청서 열기</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- STATS -->
+  <div class="stats" id="statsArea">
+    <div class="stat stat-blue"><div class="stat-label">전체 접수</div><div class="stat-val" id="stTotal">-</div><div class="stat-sub">누적 건수</div></div>
+    <div class="stat stat-green"><div class="stat-label">이번 달</div><div class="stat-val" id="stMonth">-</div><div class="stat-sub" id="stMonthLbl">-</div></div>
+    <div class="stat stat-teal"><div class="stat-label">개통 완료</div><div class="stat-val" id="stDone">-</div><div class="stat-sub">전환율 <span id="stRate">-</span></div></div>
+    <div class="stat stat-red"><div class="stat-label">보류/취소</div><div class="stat-val" id="stHold">-</div><div class="stat-sub">관리 필요</div></div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-box"><input type="text" id="searchInput" placeholder="사업자명, 담당자명, 연락처 검색..." oninput="filterData()"></div>
+    <select class="filter-sel" id="filterStatus" onchange="filterData()">
+      <option value="">전체 상태</option>
+      <option>접수완료</option><option>상담중</option><option>개통완료</option><option>취소</option><option>보류</option>
+    </select>
+    <select class="filter-sel" id="filterSite" onchange="filterData()">
+      <option value="">전체 사업장</option>
+    </select>
+    <button class="tbtn" onclick="exportExcel()">📥 Excel</button>
+    <button class="tbtn" onclick="exportPDF()">📄 PDF</button>
+    <button class="tbtn tbtn-p" onclick="loadData()">🔄 새로고침</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table>
+        <thead id="tHead"></thead>
+        <tbody id="tBody"></tbody>
+      </table>
+    </div>
+    <div class="pagi" id="pagiArea"></div>
+  </div>
+</div>
+
+<script>
+// ═══ CONFIG ═══
+const APPS_SCRIPT_URL = "https://script.googleusercontent.com/a/macros/hublink.co.kr/echo?user_content_key=AY5xjrS7p4Afo0Xw4FZ0jlTMTKT5zRRw3fT7rUZJYeVAxuVPZCSlO-HpmT0gfbUeIsK1Jxz2aHf1kgcME2Yf9kqSJC3iNo4CjoBCVd2qJRozJqLCrfIclQB_YjIdLdixrk5cF8QIFGWUHkqzMY88sgBLK52zi-f9ZQjsaGJ2w9oLL9UYGbqSu_SbmJTdnIBbhGL0Su1iDrRSn07CYYqJhpkSvrUgBDV2Ubk6-8jUUU-YLY-OMFOgB3k8nk98EA8Y-IcxXNJs3aVATvGW4mCECvAuSGo1xR-XLtdrU-MjEAvj-HEc4SWCGYszMqYSnYcG7Q&lib=Mgn7zDYjMN4lEHu2CtG-GUjrlXFeYo0_T"; // Apps Script 배포 URL
+const FORM_URL = "";        // 상담신청서 URL
+const PAGE_SIZE = 20;
+
+// ═══ STATE ═══
+let allData=[], filtered=[], page=1, sortCol='', sortAsc=true;
+
+// 표시할 컬럼 (전체 중 핵심만)
+const DISPLAY_COLS = [
+  {key:'접수번호',w:130},{key:'접수일시',w:140},{key:'사업장명',w:140},
+  {key:'접수자역할',w:80},{key:'접수자명',w:80},
+  {key:'사업자명',w:140},{key:'담당자명',w:80},{key:'연락처(HP)',w:120},
+  {key:'기존통신사',w:80},{key:'이사예정일',w:100},
+  {key:'신규건물',w:120},{key:'필요서비스',w:160},
+  {key:'AI추천패키지',w:140},{key:'전자서명',w:70},{key:'처리상태',w:80}
+];
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',()=>{
+  renderTableHeader();
+  loadData();
+});
+
+// ═══ DATA LOADING ═══
+async function loadData(){
+  const tbody=document.getElementById('tBody');
+  tbody.innerHTML='<tr><td colspan="15"><div class="loading"><div class="spinner"></div><p>데이터 불러오는 중...</p></div></td></tr>';
+
+  if(!APPS_SCRIPT_URL){
+    // Demo data for testing
+    allData = generateDemoData();
+    afterLoad();
+    return;
+  }
+
+  try{
+    const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'getData',sheet:'전체접수현황'})});
+    const j=await r.json();
+    allData=j.data||[];
+    afterLoad();
+  }catch(e){
+    tbody.innerHTML='<tr><td colspan="15"><div class="empty"><div class="empty-ico">⚠️</div><p>데이터를 불러올 수 없습니다. Apps Script URL을 확인해 주세요.</p></div></td></tr>';
+  }
+}
+
+function afterLoad(){
+  // Populate site filter
+  const sites=[...new Set(allData.map(d=>d['사업장명']).filter(Boolean))];
+  const sel=document.getElementById('filterSite');
+  sel.innerHTML='<option value="">전체 사업장</option>'+sites.map(s=>`<option>${s}</option>`).join('');
+  updateStats();
+  filterData();
+}
+
+// ═══ STATS ═══
+function updateStats(){
+  const total=allData.length;
+  const now=new Date();const ym=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const month=allData.filter(d=>String(d['접수일시']||'').startsWith(ym)).length;
+  const done=allData.filter(d=>d['처리상태']==='개통완료').length;
+  const hold=allData.filter(d=>d['처리상태']==='보류'||d['처리상태']==='취소').length;
+  document.getElementById('stTotal').textContent=total;
+  document.getElementById('stMonth').textContent=month;
+  document.getElementById('stMonthLbl').textContent=ym;
+  document.getElementById('stDone').textContent=done;
+  document.getElementById('stRate').textContent=total?Math.round(done/total*100)+'%':'0%';
+  document.getElementById('stHold').textContent=hold;
+}
+
+// ═══ FILTER & SEARCH ═══
+function filterData(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const st=document.getElementById('filterStatus').value;
+  const si=document.getElementById('filterSite').value;
+  filtered=allData.filter(d=>{
+    if(st&&d['처리상태']!==st)return false;
+    if(si&&d['사업장명']!==si)return false;
+    if(q){
+      const searchable=[d['사업자명'],d['담당자명'],d['연락처(HP)'],d['접수번호'],d['접수자명']].join(' ').toLowerCase();
+      if(!searchable.includes(q))return false;
+    }
+    return true;
+  });
+  if(sortCol) sortData();
+  page=1;
+  renderTable();
+}
+
+// ═══ SORT ═══
+function sortBy(col){
+  if(sortCol===col)sortAsc=!sortAsc; else{sortCol=col;sortAsc=true}
+  sortData();
+  renderTableHeader();
+  renderTable();
+}
+function sortData(){
+  filtered.sort((a,b)=>{
+    let va=a[sortCol]||'',vb=b[sortCol]||'';
+    if(typeof va==='string')va=va.toLowerCase();
+    if(typeof vb==='string')vb=vb.toLowerCase();
+    if(va<vb)return sortAsc?-1:1;
+    if(va>vb)return sortAsc?1:-1;
+    return 0;
+  });
+}
+
+// ═══ RENDER ═══
+function renderTableHeader(){
+  document.getElementById('tHead').innerHTML='<tr>'+DISPLAY_COLS.map(c=>{
+    let arrow='';
+    if(sortCol===c.key)arrow=sortAsc?' ↑':' ↓';
+    return `<th style="min-width:${c.w}px" onclick="sortBy('${c.key}')">${c.key}${arrow}</th>`;
+  }).join('')+'</tr>';
+}
+
+function renderTable(){
+  const start=(page-1)*PAGE_SIZE;
+  const pageData=filtered.slice(start,start+PAGE_SIZE);
+  const tbody=document.getElementById('tBody');
+
+  if(!pageData.length){
+    tbody.innerHTML='<tr><td colspan="15"><div class="empty"><div class="empty-ico">📭</div><p>조건에 맞는 데이터가 없습니다.</p></div></td></tr>';
+    document.getElementById('pagiArea').innerHTML='';
+    return;
+  }
+
+  tbody.innerHTML=pageData.map(d=>'<tr>'+DISPLAY_COLS.map(c=>{
+    let v=d[c.key]||'-';
+    // Format status
+    if(c.key==='처리상태'&&v!=='-')v=`<span class="status st-${v}">${v}</span>`;
+    // Format signature link
+    if(c.key==='전자서명'&&v&&v.startsWith('http'))v=`<a class="sig-link" href="${v}" target="_blank">보기</a>`;
+    else if(c.key==='전자서명'&&v&&v!=='-')v='✅';
+    // Truncate long text
+    if(typeof v==='string'&&v.length>30&&c.key!=='처리상태'&&c.key!=='전자서명')v=v.slice(0,28)+'…';
+    return `<td>${v}</td>`;
+  }).join('')+'</tr>').join('');
+
+  // Pagination
+  const totalPages=Math.ceil(filtered.length/PAGE_SIZE);
+  let pHtml=`<span>${filtered.length}건 중 ${start+1}~${Math.min(start+PAGE_SIZE,filtered.length)}</span><div class="pagi-btns">`;
+  for(let i=1;i<=totalPages&&i<=10;i++)pHtml+=`<button class="pagi-btn ${i===page?'on':''}" onclick="goPage(${i})">${i}</button>`;
+  pHtml+='</div>';
+  document.getElementById('pagiArea').innerHTML=pHtml;
+}
+
+function goPage(p){page=p;renderTable();document.querySelector('.table-wrap').scrollIntoView({behavior:'smooth'})}
+
+// ═══ EXPORT: Excel ═══
+function exportExcel(){
+  if(!filtered.length){alert('내보낼 데이터가 없습니다.');return}
+  const ws=XLSX.utils.json_to_sheet(filtered);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'접수현황');
+  XLSX.writeFile(wb,`허브링크_접수현황_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+// ═══ EXPORT: PDF ═══
+function exportPDF(){
+  if(!filtered.length){alert('내보낼 데이터가 없습니다.');return}
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+
+  // Title
+  doc.setFontSize(14);
+  doc.text('허브링크(주) 통신복지 상담 접수현황',14,15);
+  doc.setFontSize(9);
+  doc.setTextColor(100);
+  doc.text(`출력일: ${new Date().toLocaleDateString('ko-KR')} | 총 ${filtered.length}건`,14,21);
+
+  // Table
+  const cols=['접수번호','접수일시','사업장명','사업자명','담당자명','연락처(HP)','기존통신사','이사예정일','필요서비스','처리상태'];
+  const rows=filtered.map(d=>cols.map(c=>String(d[c]||'-').slice(0,25)));
+
+  doc.autoTable({
+    head:[cols],body:rows,startY:26,
+    styles:{fontSize:7,cellPadding:2,font:'helvetica'},
+    headStyles:{fillColor:[22,22,42],textColor:255,fontStyle:'bold'},
+    alternateRowStyles:{fillColor:[249,250,251]},
+    margin:{left:14,right:14}
+  });
+
+  doc.save(`허브링크_접수현황_${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+// ═══ DEMO DATA (Apps Script 미연동시) ═══
+function generateDemoData(){
+  const names=['(주)테크솔루션','(주)디자인랩','(주)바이오텍','(주)스마트팩토리','(주)글로벌트레이드'];
+  const people=['김민수','이서연','박준혁','최유진','정다은','한승우','윤하늘','송지호'];
+  const isps=['KT','SK브로드밴드','LG유플러스','KT','KT'];
+  const statuses=['접수완료','상담중','개통완료','접수완료','보류'];
+  const roles=['hublink','linkpeople','dealer','hublink','linkpeople'];
+  const roleNames=['설비사','상담원','대리점','관리자','영업사원'];
+  const data=[];
+  for(let i=0;i<47;i++){
+    const d=new Date();d.setDate(d.getDate()-Math.floor(Math.random()*60));
+    data.push({
+      '접수번호':`HB-DA-${d.toISOString().slice(0,10).replace(/-/g,'')}-${String(i+1).padStart(4,'0')}`,
+      '접수일시':d.toISOString().slice(0,16).replace('T',' '),
+      '사업장코드':'dasan','사업장명':'다산현대프리미어캠퍼스',
+      '접수자역할':roles[i%5],'접수자명':roleNames[i%5],'접수자소속':'허브링크',
+      '사업자명':names[i%5],'사업자등록번호':'123-45-67890',
+      '담당자명':people[i%8],'연락처(HP)':'010-'+String(1000+i).slice(-4)+'-'+String(5000+i).slice(-4),
+      '현재건물':'다산현대프리미어캠퍼스','소재지':'경기 남양주시',
+      '기존통신사':isps[i%5],'구내회선':'구내회선','사용속도':'1G',
+      '전화기':String(Math.floor(Math.random()*10)+1),'직원수':String(Math.floor(Math.random()*20)+3),
+      '이사예정일':new Date(d.getTime()+30*86400000).toISOString().slice(0,10),
+      '신규건물':['판교 알파돔','가산 W센터','성수 SK V1','잠실 롯데타워','마곡 LG사이언스'][i%5],
+      '건물층수':String(Math.floor(Math.random()*20)+1)+'층',
+      '신규주소':'서울시 강남구 테헤란로 '+String(100+i),
+      '필요서비스':['인터넷, 전화','인터넷, CCTV, 전화','인터넷','인터넷, 전화, CCTV, Wifi'][i%4],
+      '기타요청':'','AI추천패키지':['[KT]에센스+Centrex','[KT]베이직+CCTV','[KT]에센스'][i%3],
+      'AI추천사유':'','개인정보동의':'동의',
+      '전자서명':i%3===0?'https://drive.google.com/example':'✅',
+      '작성일자':d.toISOString().slice(0,10),'건물담당자':'설비사A',
+      '처리상태':statuses[i%5],'링크피플접수':'','비고':''
+    });
+  }
+  return data;
+}
+</script>
+</body>
+</html>
