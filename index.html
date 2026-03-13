@@ -396,57 +396,36 @@ async function getAI(){
   const btn=document.getElementById('aiBtn'),res=document.getElementById('aiRes');
   btn.disabled=true;btn.textContent='⏳ 분석중...';
   res.style.display='block';res.className='ai-res ld';res.textContent='Gemini AI 분석 중...';
-  const svcs=[],isp=document.getElementById('curISP').value||'미선택';
+
+  if(!APPS_SCRIPT_URL){
+    res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ Apps Script URL 미설정.</p>';
+    btn.disabled=false;btn.textContent='✨ AI 추천 받기';return;
+  }
+
+  const svcs=[];
   document.querySelectorAll('.ck.on span').forEach(s=>svcs.push(s.textContent));
   const rdV=n=>{const el=document.querySelector(`input[name="${n}"]:checked`);return el?el.value:''};
 
-  // 다중통신사 프롬프트: KT 우선 + 기존통신사 대안
-  const prompt=`당신은 한국 기업용 통신 상품 전문 컨설턴트입니다.
-
-[기업 정보]
-- 직원수(PC): ${document.getElementById('pcCount').value||'미입력'}명
-- 전화기: ${document.getElementById('phoneCount').value||'0'}대
-- 기존 통신사: ${isp}
-- 기존 속도: ${rdV('speed')||'미선택'}
-- 필요 서비스: ${svcs.join(', ')||'미선택'}
-
-[KT 상품 (3년약정/VAT포함)]
-- 오피스넷 에센스 1G: 월 49,500원 (PC무제한, FTTH-R)
-- 오피스넷 베이직 500M: 월 44,000원
-- 오피스넷 슬림 100M: 월 30,800원
-- Centrex: 월 2,750원/회선
-- 고정IP: 월 55,000원
-- 기가아이즈(CCTV): 월 13,200원~
-
-${isp!=='KT'&&isp!=='미선택'?`[${isp} 참고 상품]
-- ${isp} 기업인터넷 1G: 월 약 49,500원
-- ${isp} 기업인터넷 500M: 월 약 44,000원
-- ${isp} 기업전화: 월 약 3,000원/회선
-※ ${isp} 상품은 참고용이며, 정확한 요금은 상담 시 확인합니다.`:''}
-
-[응답규칙]
-1. KT 패키지를 최우선으로 추천 (carrier:"KT")
-${isp!=='KT'&&isp!=='미선택'?`2. 기존 통신사(${isp}) 대안 패키지도 1개 추천 (carrier:"${isp}")
-3. 기존 ${isp} 사용자가 KT로 전환 시 혜택(위약금면제+이전설치비면제) 강조`:'2. KT 대안 패키지 1개 추가 추천'}
-
-[JSON 형식으로만 응답]
-{"packages":[{"carrier":"통신사명","name":"패키지명","items":["상품-월XX원"],"monthly_total":"월합계","reason":"추천사유"}],"overall_reason":"종합분석 2~3문장","tip":"절약팁"}`;
+  // GET 파라미터로 데이터만 전송 (프롬프트는 서버에서 생성)
+  const params=new URLSearchParams({
+    action:'gemini',
+    pcCount:document.getElementById('pcCount').value||'미입력',
+    phoneCount:document.getElementById('phoneCount').value||'0',
+    curISP:document.getElementById('curISP').value||'미선택',
+    speed:rdV('speed')||'미선택',
+    services:svcs.join(', ')||'미선택',
+    newBuilding:document.getElementById('newBuilding').value||'미입력',
+  });
+  const sep=APPS_SCRIPT_URL.includes('?')?'&':'?';
 
   try{
-    let text='';
-    if(APPS_SCRIPT_URL){
-      const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'gemini',prompt})});
-      const d=await r.json();
-      text=d.text||'';
-    } else {
-      // 직접 호출 fallback (개발용)
-      res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ Apps Script URL 미설정. 배포 후 사용해 주세요.</p>';
-      btn.disabled=false;btn.textContent='✨ AI 추천 받기';return;
-    }
+    const r=await fetch(APPS_SCRIPT_URL+sep+params.toString(),{method:'GET',redirect:'follow'});
+    const d=await r.json();
+    const text=d.text||'';
     const m=text.match(/\{[\s\S]*\}/);
     if(m){const rec=JSON.parse(m[0]);renderAI(rec);aiData.rec=rec.packages?.map(p=>`[${p.carrier}]${p.name}`).join(' / ')||'';aiData.reason=rec.overall_reason||''}
     else{res.className='ai-res';res.innerHTML=`<p style="font-size:12px;color:var(--t2);white-space:pre-wrap">${text}</p>`}
-  }catch(e){res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ AI 오류. 상담원이 직접 안내합니다.</p>'}
+  }catch(e){console.error(e);res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ AI 오류. 상담원이 직접 안내합니다.</p>'}
   btn.disabled=false;btn.textContent='🔄 다시 추천';
 }
 
@@ -499,7 +478,7 @@ async function submit(){
   const fd=collect();
   let rid='HB-'+Date.now().toString(36).toUpperCase(), sync='오프라인';
   if(APPS_SCRIPT_URL){
-    try{const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fd)});const j=await r.json();if(j.receiptId)rid=j.receiptId;sync='✅ Sheets저장 + 이메일발송'}catch(e){sync='⚠️ 오프라인'}
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(fd)});sync='✅ Sheets저장 + 이메일발송'}catch(e){console.error(e);sync='⚠️ 오프라인'}
   }
   const rcpt={'접수번호':rid,'접수일시':new Date().toLocaleString('ko-KR'),'사업장':fd.siteName,'접수자':`${fd.agentRole} / ${fd.agentName}`,'사업자명':fd.bizName,'담당자':fd.contactName+' / '+fd.contactPhone,'서비스':fd.services||'-','AI추천':fd.aiRecommendation||'-','서명':'✅ 전자서명완료','저장':sync};
   let h='';for(const[k,v] of Object.entries(rcpt))h+=`<div class="rcpt-r"><span class="l">${k}</span><span class="v">${v}</span></div>`;

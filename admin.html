@@ -149,7 +149,8 @@ async function loadData(){
   }
 
   try{
-    const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'getData',sheet:'전체접수현황'})});
+    const url=APPS_SCRIPT_URL+(APPS_SCRIPT_URL.includes('?')?'&':'?')+'action=getData&sheet=전체접수현황';
+    const r=await fetch(url,{method:'GET',redirect:'follow'});
     const j=await r.json();
     allData=j.data||[];
     afterLoad();
