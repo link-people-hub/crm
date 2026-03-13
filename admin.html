@@ -149,13 +149,20 @@ async function loadData(){
   }
 
   try{
-    const url=APPS_SCRIPT_URL+(APPS_SCRIPT_URL.includes('?')?'&':'?')+'action=getData&sheet=전체접수현황';
-    const r=await fetch(url,{method:'GET',redirect:'follow'});
-    const j=await r.json();
+    const url=APPS_SCRIPT_URL+'?action=getData&sheet=전체접수현황';
+    const r=await fetch(url);
+    const raw=await r.text();
+    console.log('Dashboard raw response:', raw.substring(0,500));
+    let j;
+    try{ j=JSON.parse(raw); }catch(pe){
+      tbody.innerHTML='<tr><td colspan="15"><div class="empty"><div class="empty-ico">⚠️</div><p>응답 파싱 오류: '+raw.substring(0,150).replace(/</g,'&lt;')+'</p></div></td></tr>';
+      return;
+    }
     allData=j.data||[];
     afterLoad();
   }catch(e){
-    tbody.innerHTML='<tr><td colspan="15"><div class="empty"><div class="empty-ico">⚠️</div><p>데이터를 불러올 수 없습니다. Apps Script URL을 확인해 주세요.</p></div></td></tr>';
+    console.error('Dashboard error:',e);
+    tbody.innerHTML='<tr><td colspan="15"><div class="empty"><div class="empty-ico">⚠️</div><p>네트워크 오류: '+e.message+'<br>로컬(file://) 실행 시 CORS 차단될 수 있습니다.<br>GitHub Pages에 업로드 후 테스트해 주세요.</p></div></td></tr>';
   }
 }
 

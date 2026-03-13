@@ -300,6 +300,7 @@ const SITES = {
 
 // ═══ STATE ═══
 let step=1, site=null, role=null, consented=false, aiData={rec:"",reason:""}, sigPad=null;
+let customerMode=false; // QR 고객 직접 접속 모드
 
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded',()=>{
@@ -307,7 +308,68 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderSites();
   initSigPad();
   setupFmt();
+
+  // 고객 QR 모드 감지: ?site=dasan 등
+  const urlParams=new URLSearchParams(window.location.search);
+  const siteParam=urlParams.get('site');
+  if(siteParam && SITES[siteParam]){
+    enterCustomerMode(siteParam);
+  }
 });
+
+// ═══ 고객 전용 모드 ═══
+function enterCustomerMode(siteCode){
+  customerMode=true;
+  // 사업장 자동 설정
+  site=SITES[siteCode]; site._code=siteCode;
+  document.getElementById('curBuilding').value=site.name;
+
+  // 접수자 정보 자동 설정 (고객 직접 접수)
+  role='customer';
+  document.getElementById('agentName').value='고객직접접수';
+  document.getElementById('agentOrg').value=site.name;
+
+  // 헤더 변경 — 내부 정보 숨김
+  document.querySelector('.hdr-badge').textContent=site.name+' 통신복지 서비스';
+  document.querySelector('.hdr h1').innerHTML='통신 상담 <em>신청서</em>';
+  document.getElementById('hdrSub').textContent='퇴거 입주사를 위한 특별 혜택 안내';
+  document.getElementById('siteInd').style.display='none';
+  document.getElementById('ftrC').textContent=`문의: ${site.phone}`;
+
+  // 푸터 변경
+  document.querySelector('.ftr p').innerHTML=`${site.name} 관리단 제휴 서비스 | ${site.phone}`;
+
+  // 프로그레스 바 — step 1,2 숨기고 3부터 표시
+  const progBar=document.getElementById('progBar');
+  progBar.innerHTML=`
+    <div class="stp on" data-s="3"><div class="stp-n">1</div><span class="stp-l">고객정보</span></div><div class="stp-line"></div>
+    <div class="stp" data-s="4"><div class="stp-n">2</div><span class="stp-l">기존정보</span></div><div class="stp-line"></div>
+    <div class="stp" data-s="5"><div class="stp-n">3</div><span class="stp-l">신규설치</span></div><div class="stp-line"></div>
+    <div class="stp" data-s="6"><div class="stp-n">4</div><span class="stp-l">AI추천</span></div><div class="stp-line"></div>
+    <div class="stp" data-s="7"><div class="stp-n">5</div><span class="stp-l">서명·접수</span></div>
+  `;
+
+  // Step 3(고객정보)부터 시작
+  step=3;
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-3').classList.add('on');
+  updateProgress();
+}
+
+function updateProgress(){
+  if(customerMode){
+    // 고객 모드: step 3~7을 1~5로 매핑
+    const stps=document.querySelectorAll('.stp');
+    const lines=document.querySelectorAll('.stp-line');
+    const map={3:0,4:1,5:2,6:3,7:4};
+    const idx=map[step]??0;
+    stps.forEach((s,i)=>{s.classList.remove('on','ok');if(i<idx)s.classList.add('ok');if(i===idx)s.classList.add('on')});
+    lines.forEach((l,i)=>l.classList.toggle('ok',i<idx));
+  } else {
+    document.querySelectorAll('.stp').forEach((s,i)=>{s.classList.remove('on','ok');if(i+1<step)s.classList.add('ok');if(i+1===step)s.classList.add('on')});
+    document.querySelectorAll('.stp-line').forEach((l,i)=>l.classList.toggle('ok',i+1<step));
+  }
+}
 
 function initSigPad(){
   const canvas=document.getElementById('sigCanvas');
@@ -332,10 +394,11 @@ function pickRole(el,r){
   document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
   document.getElementById('btnS1').disabled=false;
-  // Auto-fill org based on role
+  // Always update org based on role (fixes re-selection bug)
   const orgField=document.getElementById('agentOrg');
-  if(r==='hublink'&&!orgField.value) orgField.value='허브링크(주)';
-  if(r==='linkpeople'&&!orgField.value) orgField.value='(주)링크피플';
+  if(r==='hublink') orgField.value='허브링크(주)';
+  else if(r==='linkpeople') orgField.value='(주)링크피플';
+  else orgField.value='';
 }
 
 // ═══ SITES ═══
@@ -363,14 +426,22 @@ function pickSite(k){
 
 // ═══ NAV ═══
 function go(n){
+  // 고객 모드: step 1, 2로 못 가게 차단
+  if(customerMode && n<3) return;
   if(n>step&&step===3&&!valS3()) return;
   step=n;
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   document.getElementById('sec-'+n).classList.add('on');
-  document.querySelectorAll('.stp').forEach((s,i)=>{s.classList.remove('on','ok');if(i+1<n)s.classList.add('ok');if(i+1===n)s.classList.add('on')});
-  document.querySelectorAll('.stp-line').forEach((l,i)=>l.classList.toggle('ok',i+1<n));
+  updateProgress();
   window.scrollTo({top:0,behavior:'smooth'});
-  if(n===7) setTimeout(()=>initSigPad(),100); // re-init on step show
+  if(n===7) setTimeout(()=>initSigPad(),100);
+
+  // 고객 모드: Step 3의 이전 버튼 숨기기
+  if(customerMode){
+    const sec3Btns=document.querySelector('#sec-3 .btn-row');
+    const backBtn=sec3Btns?.querySelector('.btn-g');
+    if(backBtn) backBtn.style.display='none';
+  }
 }
 function valS3(){
   if(!document.getElementById('bizName').value.trim()||!document.getElementById('contactName').value.trim()||!document.getElementById('contactPhone').value.trim()){alert('사업자명, 담당자명, 연락처 필수');return false}return true;
@@ -406,7 +477,6 @@ async function getAI(){
   document.querySelectorAll('.ck.on span').forEach(s=>svcs.push(s.textContent));
   const rdV=n=>{const el=document.querySelector(`input[name="${n}"]:checked`);return el?el.value:''};
 
-  // GET 파라미터로 데이터만 전송 (프롬프트는 서버에서 생성)
   const params=new URLSearchParams({
     action:'gemini',
     pcCount:document.getElementById('pcCount').value||'미입력',
@@ -416,16 +486,35 @@ async function getAI(){
     services:svcs.join(', ')||'미선택',
     newBuilding:document.getElementById('newBuilding').value||'미입력',
   });
-  const sep=APPS_SCRIPT_URL.includes('?')?'&':'?';
+  const url=APPS_SCRIPT_URL+'?'+params.toString();
 
   try{
-    const r=await fetch(APPS_SCRIPT_URL+sep+params.toString(),{method:'GET',redirect:'follow'});
-    const d=await r.json();
-    const text=d.text||'';
+    const r=await fetch(url);
+    const raw=await r.text();
+    console.log('AI raw response:',raw.substring(0,500));
+
+    let d;
+    try{ d=JSON.parse(raw); }catch(pe){
+      // 응답이 JSON이 아닌 경우 (HTML 리다이렉트 페이지 등)
+      res.className='ai-res';
+      res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ 응답 파싱 오류. 응답 앞부분: '+raw.substring(0,200).replace(/</g,'&lt;')+'</p>';
+      btn.disabled=false;btn.textContent='🔄 다시 추천';return;
+    }
+
+    const text=d.text||d.error||'';
+    if(d.status==='error'){
+      res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ 서버 오류: '+text+'</p>';
+      btn.disabled=false;btn.textContent='🔄 다시 추천';return;
+    }
+
     const m=text.match(/\{[\s\S]*\}/);
     if(m){const rec=JSON.parse(m[0]);renderAI(rec);aiData.rec=rec.packages?.map(p=>`[${p.carrier}]${p.name}`).join(' / ')||'';aiData.reason=rec.overall_reason||''}
-    else{res.className='ai-res';res.innerHTML=`<p style="font-size:12px;color:var(--t2);white-space:pre-wrap">${text}</p>`}
-  }catch(e){console.error(e);res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ AI 오류. 상담원이 직접 안내합니다.</p>'}
+    else{res.className='ai-res';res.innerHTML=`<p style="font-size:12px;color:var(--t2);white-space:pre-wrap">${text||'응답이 비어 있습니다.'}</p>`}
+  }catch(e){
+    console.error('AI fetch error:',e);
+    res.className='ai-res';
+    res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ 네트워크 오류: '+e.message+'<br><br>이 오류는 CORS 차단일 수 있습니다.<br>파일을 로컬(file://)로 열었다면 GitHub Pages에 업로드 후 테스트해 주세요.</p>';
+  }
   btn.disabled=false;btn.textContent='🔄 다시 추천';
 }
 
@@ -495,15 +584,25 @@ function resetAll(){
   document.querySelectorAll('textarea').forEach(t=>t.value='');
   document.querySelectorAll('.rd,.ck,.site-card,.role-card').forEach(e=>e.classList.remove('on','sel'));
   document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(i=>i.checked=false);
-  consented=false;site=null;role=null;aiData={rec:'',reason:''};
+  consented=false;aiData={rec:'',reason:''};
   document.getElementById('consentT').classList.remove('yes');
-  ['subBtn','btnS1','btnS2'].forEach(id=>document.getElementById(id).disabled=true);
-  document.getElementById('siteInd').style.display='none';
   document.getElementById('aiRes').style.display='none';
   if(sigPad)sigPad.clear();
   document.getElementById('sigWrap').classList.remove('has-sig');
   document.getElementById('signDate').value=new Date().toISOString().slice(0,10);
-  step=1;go(1);
+  document.getElementById('subBtn').disabled=true;
+
+  if(customerMode){
+    // 고객 모드: 사업장·역할 유지, step 3부터 재시작
+    const urlParams=new URLSearchParams(window.location.search);
+    const siteCode=urlParams.get('site');
+    if(siteCode && SITES[siteCode]) enterCustomerMode(siteCode);
+  } else {
+    site=null;role=null;
+    ['btnS1','btnS2'].forEach(id=>document.getElementById(id).disabled=true);
+    document.getElementById('siteInd').style.display='none';
+    step=1;go(1);
+  }
 }
 </script>
 </body>
