@@ -2,607 +2,1248 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>허브링크 | 통신복지 상담 신청 v4</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>다산프리미어캠퍼스 C동 | 통신 전환 상담</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
 <style>
-:root{--R:#E4002B;--D:#16162A;--B:#0066CC;--BL:#E8F2FF;--T:#00A89D;--bg:#F5F5F0;--cd:#FFF;--bd:#E4E4E4;--tx:#1A1A2E;--t2:#555;--t3:#999;--ok:#16A34A;--r:14px;--rs:8px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;min-height:100vh}
-.hdr{background:linear-gradient(135deg,var(--D),#2A2A50);color:#fff;position:relative;overflow:hidden}
-.hdr::after{content:'';position:absolute;top:-60%;right:-8%;width:420px;height:420px;background:radial-gradient(circle,rgba(228,0,43,.12),transparent 70%);border-radius:50%}
-.hdr-in{max-width:880px;margin:0 auto;padding:24px;position:relative;z-index:1}
-.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:3px 12px;font-size:11px;color:rgba(255,255,255,.7);margin-bottom:12px}
-.hdr-badge .dot{width:6px;height:6px;background:var(--ok);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hdr h1{font-size:22px;font-weight:700}.hdr h1 em{color:var(--R);font-style:normal}
-.hdr-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px}
-.site-ind{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px;background:rgba(0,168,157,.15);border:1px solid rgba(0,168,157,.25);border-radius:6px;font-size:11px;font-weight:600;color:var(--T)}
-.prog-w{max-width:880px;margin:0 auto;padding:0 24px;transform:translateY(-14px)}
-.prog{background:var(--cd);border-radius:var(--r);padding:14px 18px;box-shadow:0 4px 16px rgba(0,0,0,.06);display:flex;align-items:center;overflow-x:auto}
-.stp{display:flex;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
-.stp-n{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:#EEE;color:var(--t3);transition:.3s}
-.stp.on .stp-n{background:var(--B);color:#fff;box-shadow:0 2px 8px rgba(0,102,204,.3)}
-.stp.ok .stp-n{background:var(--ok);color:#fff}
-.stp-l{font-size:10px;font-weight:500;color:var(--t3);white-space:nowrap}.stp.on .stp-l{color:var(--B);font-weight:700}.stp.ok .stp-l{color:var(--ok)}
-.stp-line{flex:1;height:2px;background:#EEE;margin:0 5px;min-width:10px}.stp-line.ok{background:var(--ok)}
-.main{max-width:880px;margin:0 auto;padding:4px 24px 60px}
-.sec{display:none;animation:fu .35s ease}.sec.on{display:block}
-@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.cd{background:var(--cd);border-radius:var(--r);padding:22px 24px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.04);border:1px solid var(--bd)}
-.cd-t{display:flex;align-items:center;gap:9px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--D)}
-.cd-ico{width:32px;height:32px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:16px}
-.cd-t h2{font-size:15px;font-weight:700}.cd-t h2 small{font-size:10px;font-weight:400;color:var(--t3);display:block}
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fg .full{grid-column:1/-1}
-.fi{display:flex;flex-direction:column;gap:4px}
-.fi label{font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px}.fi .req{color:var(--R)}
-.fi input,.fi select,.fi textarea{border:1.5px solid var(--bd);border-radius:var(--rs);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;color:var(--tx);background:#FAFAFA;transition:.2s;outline:none}
-.fi input:focus,.fi select:focus,.fi textarea:focus{border-color:var(--B);background:#fff;box-shadow:0 0 0 3px rgba(0,102,204,.06)}
-.fi input::placeholder,.fi textarea::placeholder{color:var(--t3);font-size:12px}
-.fi select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
-/* Role cards */
-.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.role-card{border:2px solid var(--bd);border-radius:var(--r);padding:16px;cursor:pointer;transition:.2s;background:#FAFAFA;text-align:center}
-.role-card:hover{border-color:var(--B);background:var(--BL)}
-.role-card.sel{border-color:var(--B);background:var(--BL);box-shadow:0 2px 12px rgba(0,102,204,.1)}
-.role-card .r-ico{font-size:28px;margin-bottom:6px}
-.role-card h3{font-size:13px;font-weight:700}.role-card p{font-size:10px;color:var(--t2)}
-/* Site cards */
-.site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.site-card{border:2px solid var(--bd);border-radius:var(--r);padding:18px;cursor:pointer;transition:.2s;background:#FAFAFA;position:relative}
-.site-card:hover{border-color:var(--B);background:var(--BL)}
-.site-card.sel{border-color:var(--B);background:var(--BL)}
-.site-card.sel::after{content:'✓';position:absolute;top:10px;right:12px;width:22px;height:22px;background:var(--B);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
-.site-card h3{font-size:14px;font-weight:700;margin-bottom:3px}.site-card p{font-size:11px;color:var(--t2)}
-.tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;margin-top:6px}
-.tag-on{background:#DCFCE7;color:#166534}.tag-soon{background:#FEF3C7;color:#92400E}
-/* Checkbox/Radio (fixed - using div not label) */
-.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px}
-.ck{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1.5px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:.2s;background:#FAFAFA}
-.ck:hover{border-color:var(--B);background:var(--BL)}
-.ck input{display:none}.ck.on{border-color:var(--B);background:var(--BL)}
-.ck-box{width:16px;height:16px;border:2px solid var(--bd);border-radius:3px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
-.ck.on .ck-box{background:var(--B);border-color:var(--B)}
-.ck-box svg{display:none}.ck.on .ck-box svg{display:block}
-.ck span{font-size:12px;font-weight:500}
-.rd-g{display:flex;gap:8px}
-.rd{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1.5px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:.2s;background:#FAFAFA;flex:1;justify-content:center}
-.rd:hover{border-color:var(--B)}.rd.on{border-color:var(--B);background:var(--BL)}
-.rd input{display:none}
-.rd-dot{width:14px;height:14px;border:2px solid var(--bd);border-radius:50%;position:relative;transition:.2s}
-.rd.on .rd-dot{border-color:var(--B)}.rd.on .rd-dot::after{content:'';position:absolute;width:6px;height:6px;background:var(--B);border-radius:50%;top:2px;left:2px}
-.rd span{font-size:12px;font-weight:500}
-/* AI */
-.ai-cd{background:linear-gradient(135deg,#F0F7FF,#EEF8F7);border:1.5px solid #C6DEFF;border-radius:var(--r);padding:20px;margin-bottom:12px}
-.ai-cd h3{font-size:14px;font-weight:700;color:var(--B);display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.ai-cd>p{font-size:12px;color:var(--t2);margin-bottom:14px}
-.ai-res{background:#fff;border-radius:var(--rs);padding:16px;border:1px solid #D6E8FF;min-height:50px}
-.ai-res.ld{display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:12px}
-.pkg{padding:10px 0;border-bottom:1px solid #F0F0F0}.pkg:last-child{border-bottom:none}
-.pkg-name{font-size:13px;font-weight:700}.pkg-price{font-size:12px;color:var(--B);font-weight:600}
-.pkg-reason{font-size:11px;color:var(--t2);margin-top:3px}
-.ai-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-right:4px}
-.ai-tag-kt{background:#DCFCE7;color:#166534}.ai-tag-sk{background:#FFF7ED;color:#9A3412}.ai-tag-lg{background:#F3E8FF;color:#7C3AED}
-.ai-btn{display:inline-flex;align-items:center;gap:5px;padding:9px 18px;background:var(--B);color:#fff;border:none;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:.2s}
-.ai-btn:hover{background:#0055AA}.ai-btn:disabled{background:#CCC;cursor:not-allowed}
-/* Banner */
-.ban{background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border:1px solid #FDE68A;border-radius:var(--rs);padding:10px 14px;display:flex;align-items:flex-start;gap:7px;margin-bottom:14px}
-.ban p{font-size:12px;color:#92400E;line-height:1.5}.ban strong{font-weight:600}
-/* Privacy */
-.priv{background:#F9FAFB;border:1px solid var(--bd);border-radius:var(--rs);padding:16px;margin-bottom:14px}
-.priv h3{font-size:12px;font-weight:700;margin-bottom:8px}
-.priv ul{list-style:none}.priv li{font-size:11px;color:var(--t2);padding:2px 0 2px 12px;position:relative;line-height:1.5}.priv li::before{content:'·';position:absolute;left:3px}
-/* Signature */
-.sig-wrap{margin-top:14px}
-.sig-wrap h4{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.sig-canvas-wrap{border:2px solid var(--bd);border-radius:var(--rs);background:#fff;position:relative;touch-action:none}
-.sig-canvas-wrap canvas{display:block;width:100%;height:160px;border-radius:var(--rs);cursor:crosshair}
-.sig-placeholder{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--t3);font-size:12px;pointer-events:none;transition:.2s}
-.sig-canvas-wrap.has-sig .sig-placeholder{opacity:0}
-.sig-actions{display:flex;gap:8px;margin-top:8px}
-.sig-actions button{padding:6px 14px;border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--t2);font-family:'Noto Sans KR',sans-serif}
-.sig-actions button:hover{border-color:var(--B);color:var(--B)}
-/* Consent */
-.consent{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:.3s}
-.consent.yes{border-color:var(--ok);background:#F0FDF4}
-.tgl{width:42px;height:22px;background:#D1D5DB;border-radius:11px;position:relative;transition:.3s;flex-shrink:0}
-.consent.yes .tgl{background:var(--ok)}
-.tgl::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.consent.yes .tgl::after{left:22px}
-.consent-txt{font-size:12px;font-weight:600;color:var(--t2)}.consent.yes .consent-txt{color:#166534}
-/* Buttons */
-.btn-row{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}
-.btn{padding:10px 22px;border-radius:var(--rs);font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:.2s;border:none;display:flex;align-items:center;gap:4px}
-.btn-g{background:#fff;color:var(--t2);border:1.5px solid var(--bd)}.btn-g:hover{border-color:#CCC}
-.btn-p{background:var(--B);color:#fff;box-shadow:0 2px 8px rgba(0,102,204,.2)}.btn-p:hover{background:#0055AA;transform:translateY(-1px)}.btn-p:disabled{background:#CCC;box-shadow:none;cursor:not-allowed;transform:none}
-.btn-r{background:var(--R);color:#fff;box-shadow:0 2px 8px rgba(228,0,43,.2);padding:12px 28px;font-size:14px}.btn-r:hover{background:#C5001F;transform:translateY(-1px)}
-/* Success */
-.success{text-align:center;padding:40px 16px}
-.success-ico{width:68px;height:68px;background:#F0FDF4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px;animation:si .5s ease}
-@keyframes si{from{transform:scale(0)}to{transform:scale(1)}}
-.success h2{font-size:18px;font-weight:700;margin-bottom:4px}.success p{color:var(--t2);font-size:12px;max-width:360px;margin:0 auto 16px}
-.rcpt{background:#F9FAFB;border:1px solid var(--bd);border-radius:var(--r);padding:18px;max-width:440px;margin:0 auto;text-align:left}
-.rcpt-r{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F0F0F0;font-size:11.5px}.rcpt-r:last-child{border-bottom:none}
-.rcpt-r .l{color:var(--t3)}.rcpt-r .v{font-weight:600;text-align:right;max-width:55%}
-/* Footer */
-.ftr{max-width:880px;margin:0 auto;padding:14px 24px 32px;text-align:center}
-.ftr p{font-size:10px;color:var(--t3);line-height:1.7}
-@media(max-width:640px){.hdr-in{padding:18px 14px}.hdr h1{font-size:19px}.prog-w,.main{padding-left:12px;padding-right:12px}.prog{padding:10px 12px}.stp-l{display:none}.fg{grid-template-columns:1fr}.cd{padding:16px}.rd-g{flex-direction:column}.ck-grid{grid-template-columns:1fr 1fr}.btn-row{flex-direction:column}.btn{justify-content:center}.role-grid{grid-template-columns:1fr}.site-grid{grid-template-columns:1fr}}
+:root {
+  --kt: #E4002B;
+  --kt2: #C5001F;
+  --bg: #FAFAF8;
+  --card: #FFFFFF;
+  --border: #E8E8E4;
+  --accent: #1A1A2E;
+  --blue: #0066CC;
+  --blue2: #004DA6;
+  --teal: #00A89D;
+  --green: #16A34A;
+  --warm: #F5F0EB;
+  --tx: #1A1A2E;
+  --t2: #555;
+  --t3: #999;
+  --r: 16px;
+  --rs: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--tx);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HERO HEADER ── */
+.hero {
+  background: var(--accent);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(228,0,43,.15), transparent 70%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; left: -30px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(0,168,157,.1), transparent 70%);
+  border-radius: 50%;
+}
+.hero-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 28px 20px 20px;
+  position: relative;
+  z-index: 1;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 10.5px;
+  color: rgba(255,255,255,.6);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.hero-tag .pulse-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero h1 {
+  font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  line-height: 1.3;
+}
+.hero h1 em { color: var(--kt); font-style: normal; }
+.hero-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,.45);
+  margin-top: 4px;
+  font-weight: 300;
+}
+.hero-site {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 5px 12px;
+  background: rgba(0,168,157,.12);
+  border: 1px solid rgba(0,168,157,.2);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+}
+
+/* ── PRICING BANNER ── */
+.pricing-strip {
+  background: linear-gradient(135deg, #FFF7ED, #FEF9F0);
+  border-bottom: 1px solid #F5DEB3;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.pricing-inner {
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #78350F;
+}
+.price-row .pr-label {
+  font-weight: 700;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+.price-row .pr-val {
+  font-weight: 800;
+  color: var(--kt);
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+}
+.price-row .pr-note {
+  font-size: 10px;
+  color: #92400E;
+  font-weight: 400;
+}
+.pricing-badge {
+  display: inline-block;
+  background: var(--kt);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  letter-spacing: .5px;
+}
+
+/* ── PROGRESS ── */
+.prog-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 20px;
+  transform: translateY(-16px);
+}
+.prog {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+}
+.stp {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.stp-n {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: #EEE;
+  color: var(--t3);
+  transition: .3s;
+}
+.stp.on .stp-n {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0,102,204,.3);
+}
+.stp.ok .stp-n {
+  background: var(--green);
+  color: #fff;
+}
+.stp-l {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--t3);
+  white-space: nowrap;
+}
+.stp.on .stp-l { color: var(--blue); font-weight: 700; }
+.stp.ok .stp-l { color: var(--green); }
+.stp-line {
+  flex: 1;
+  height: 2px;
+  background: #EEE;
+  margin: 0 6px;
+  min-width: 10px;
+  transition: .3s;
+}
+.stp-line.ok { background: var(--green); }
+
+/* ── SECTIONS ── */
+.main {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+.sec { display: none; animation: fadeup .35s ease; }
+.sec.on { display: block; }
+@keyframes fadeup { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── CARDS ── */
+.cd {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 22px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  border: 1px solid var(--border);
+}
+.cd-t {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+}
+.cd-ico {
+  width: 34px; height: 34px;
+  border-radius: var(--rs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+.cd-t h2 {
+  font-size: 15px;
+  font-weight: 700;
+}
+.cd-t h2 small {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--t3);
+  display: block;
+  margin-top: 1px;
+}
+
+/* ── FORM FIELDS ── */
+.fg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.fg .full { grid-column: 1 / -1; }
+.fi {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.fi label {
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.fi .req { color: var(--kt); }
+.fi input, .fi select, .fi textarea {
+  border: 1.5px solid var(--border);
+  border-radius: var(--rs);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--tx);
+  background: #FAFAFA;
+  transition: .2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+.fi input:focus, .fi select:focus, .fi textarea:focus {
+  border-color: var(--blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,102,204,.06);
+}
+.fi input::placeholder, .fi textarea::placeholder {
+  color: var(--t3);
+  font-size: 12px;
+}
+.fi select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+/* ── PRODUCT CARDS ── */
+.product-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.product-card {
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px;
+  cursor: pointer;
+  transition: .2s;
+  background: #FAFAFA;
+  position: relative;
+}
+.product-card:hover { border-color: var(--blue); background: #F0F7FF; }
+.product-card.sel {
+  border-color: var(--blue);
+  background: #EBF5FF;
+  box-shadow: 0 2px 12px rgba(0,102,204,.1);
+}
+.product-card.sel::after {
+  content: '✓';
+  position: absolute;
+  top: 12px; right: 14px;
+  width: 24px; height: 24px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.pc-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.pc-badge-best { background: var(--kt); color: #fff; }
+.pc-badge-combo { background: var(--blue); color: #fff; }
+.pc-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  padding-right: 30px;
+}
+.pc-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.pc-item {
+  font-size: 10px;
+  background: #F0F0F0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--t2);
+  font-weight: 500;
+}
+.pc-price {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--blue);
+  letter-spacing: -1px;
+}
+.pc-price small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--t2);
+  letter-spacing: 0;
+}
+.pc-note {
+  font-size: 11px;
+  color: var(--t2);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.pc-note strong { color: var(--kt); }
+
+/* ── OPTION TOGGLES ── */
+.opt-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+.opt-row-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rs);
+  cursor: pointer;
+  transition: .2s;
+  background: #FAFAFA;
+}
+.opt:hover { border-color: var(--blue); }
+.opt.on { border-color: var(--blue); background: #EBF5FF; }
+.opt input { display: none; }
+.opt-box {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .2s;
+  flex-shrink: 0;
+}
+.opt.on .opt-box { background: var(--blue); border-color: var(--blue); }
+.opt-box svg { display: none; }
+.opt.on .opt-box svg { display: block; }
+.opt-info { flex: 1; }
+.opt-label { font-size: 13px; font-weight: 600; }
+.opt-desc { font-size: 11px; color: var(--t2); }
+.opt-price {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--blue);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── INSTALL FEE NOTICE ── */
+.fee-notice {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: var(--rs);
+  padding: 12px 14px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #991B1B;
+  line-height: 1.6;
+}
+.fee-notice strong { font-weight: 700; }
+
+/* ── CONSENT / SIGNATURE ── */
+.priv {
+  background: #F9FAFB;
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.priv h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.priv ul { list-style: none; }
+.priv li {
+  font-size: 11px;
+  color: var(--t2);
+  padding: 2px 0 2px 12px;
+  position: relative;
+  line-height: 1.5;
+}
+.priv li::before { content:'·'; position:absolute; left:3px; }
+
+.consent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--rs);
+  cursor: pointer;
+  transition: .3s;
+}
+.consent.yes { border-color: var(--green); background: #F0FDF4; }
+.tgl {
+  width: 44px; height: 24px;
+  background: #D1D5DB;
+  border-radius: 12px;
+  position: relative;
+  transition: .3s;
+  flex-shrink: 0;
+}
+.consent.yes .tgl { background: var(--green); }
+.tgl::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: .3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+.consent.yes .tgl::after { left: 23px; }
+.consent-txt { font-size: 13px; font-weight: 600; color: var(--t2); }
+.consent.yes .consent-txt { color: #166534; }
+
+.sig-wrap { margin-top: 16px; }
+.sig-wrap h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sig-canvas-wrap {
+  border: 2px solid var(--border);
+  border-radius: var(--rs);
+  background: #fff;
+  position: relative;
+  touch-action: none;
+}
+.sig-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 150px;
+  border-radius: var(--rs);
+  cursor: crosshair;
+}
+.sig-placeholder {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--t3);
+  font-size: 12px;
+  pointer-events: none;
+  transition: .2s;
+}
+.sig-canvas-wrap.has-sig .sig-placeholder { opacity: 0; }
+.sig-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.sig-actions button {
+  padding: 7px 14px;
+  border-radius: var(--rs);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--t2);
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: .2s;
+}
+.sig-actions button:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ── BUTTONS ── */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.btn {
+  padding: 12px 24px;
+  border-radius: var(--rs);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: .2s;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-g {
+  background: #fff;
+  color: var(--t2);
+  border: 1.5px solid var(--border);
+}
+.btn-g:hover { border-color: #CCC; }
+.btn-p {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0,102,204,.2);
+}
+.btn-p:hover { background: var(--blue2); transform: translateY(-1px); }
+.btn-p:disabled {
+  background: #CCC;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-submit {
+  background: var(--kt);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(228,0,43,.2);
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  width: 100%;
+  justify-content: center;
+}
+.btn-submit:hover { background: var(--kt2); transform: translateY(-1px); }
+.btn-submit:disabled {
+  background: #CCC;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── SUCCESS ── */
+.success { text-align: center; padding: 40px 16px; }
+.success-ico {
+  width: 72px; height: 72px;
+  background: #F0FDF4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 34px;
+  animation: popIn .5s ease;
+}
+@keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+.success h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.success p { color: var(--t2); font-size: 12px; max-width: 360px; margin: 0 auto 18px; line-height: 1.7; }
+.rcpt {
+  background: #F9FAFB;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: left;
+}
+.rcpt-r {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid #F0F0F0;
+  font-size: 12px;
+}
+.rcpt-r:last-child { border-bottom: none; }
+.rcpt-r .rl { color: var(--t3); }
+.rcpt-r .rv { font-weight: 600; text-align: right; max-width: 60%; }
+
+/* ── FOOTER ── */
+.ftr {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 14px 20px 32px;
+  text-align: center;
+}
+.ftr p { font-size: 10px; color: var(--t3); line-height: 1.7; }
+.ftr a { color: var(--blue); text-decoration: none; }
+
+/* ── CONTACT FLOAT ── */
+.contact-float {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(22,163,74,.35);
+  transition: .2s;
+}
+.contact-float:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(22,163,74,.4); }
+.contact-float:active { transform: scale(.97); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .hero-inner { padding: 22px 16px 16px; }
+  .hero h1 { font-size: 20px; }
+  .pricing-inner { padding: 12px 16px; }
+  .prog-wrap, .main { padding-left: 14px; padding-right: 14px; }
+  .prog { padding: 10px 12px; }
+  .stp-l { display: none; }
+  .fg { grid-template-columns: 1fr; }
+  .cd { padding: 18px 16px; }
+  .btn-row { flex-direction: column; }
+  .btn { justify-content: center; }
+  .price-row { flex-direction: column; gap: 2px; }
+  .price-row .pr-label { min-width: auto; }
+}
 </style>
 </head>
 <body>
-<div class="hdr"><div class="hdr-in">
-  <div class="hdr-badge"><span class="dot"></span>허브링크(주) 통신복지 CRM v4</div>
-  <h1>서비스 이용 <em>상담 신청서</em></h1>
-  <p class="hdr-sub" id="hdrSub">접수자 정보를 먼저 선택해 주세요</p>
-  <div class="site-ind" id="siteInd" style="display:none">📍 <span id="siteLbl"></span></div>
-</div></div>
 
-<div class="prog-w"><div class="prog" id="progBar">
-  <div class="stp on" data-s="1"><div class="stp-n">1</div><span class="stp-l">접수자</span></div><div class="stp-line"></div>
-  <div class="stp" data-s="2"><div class="stp-n">2</div><span class="stp-l">사업장</span></div><div class="stp-line"></div>
-  <div class="stp" data-s="3"><div class="stp-n">3</div><span class="stp-l">고객정보</span></div><div class="stp-line"></div>
-  <div class="stp" data-s="4"><div class="stp-n">4</div><span class="stp-l">기존정보</span></div><div class="stp-line"></div>
-  <div class="stp" data-s="5"><div class="stp-n">5</div><span class="stp-l">신규설치</span></div><div class="stp-line"></div>
-  <div class="stp" data-s="6"><div class="stp-n">6</div><span class="stp-l">AI추천</span></div><div class="stp-line"></div>
-  <div class="stp" data-s="7"><div class="stp-n">7</div><span class="stp-l">서명·접수</span></div>
-</div></div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag"><span class="pulse-dot"></span>공동특별할인 진행중</div>
+    <h1>인터넷·TV <em>전환 상담</em></h1>
+    <p class="hero-sub">기숙사 입주자 전용 KT 공동특별할인 안내</p>
+    <div class="hero-site">📍 다산현대프리미어캠퍼스 C동 기숙사</div>
+  </div>
+</div>
+
+<!-- PRICING STRIP -->
+<div class="pricing-strip">
+  <div class="pricing-inner">
+    <span class="pricing-badge">공동특별할인 요금표</span>
+    <div class="price-row">
+      <span class="pr-label">인터넷500M + Wifi</span>
+      <span class="pr-val">19,100<small>원/월</small></span>
+      <span class="pr-note">(KT모바일 결합 시)</span>
+    </div>
+    <div class="price-row">
+      <span class="pr-label">인터넷 + TV</span>
+      <span class="pr-val">27,200<small>원/월</small></span>
+      <span class="pr-note">(KT모바일 결합 시)</span>
+    </div>
+    <div class="price-row">
+      <span class="pr-label">유심변경 시</span>
+      <span class="pr-val">15,100<small>원</small> / 23,200<small>원</small></span>
+      <span class="pr-note">(단품 / +TV)</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog" id="progBar">
+    <div class="stp on" data-s="1"><div class="stp-n">1</div><span class="stp-l">고객정보</span></div>
+    <div class="stp-line"></div>
+    <div class="stp" data-s="2"><div class="stp-n">2</div><span class="stp-l">상품선택</span></div>
+    <div class="stp-line"></div>
+    <div class="stp" data-s="3"><div class="stp-n">3</div><span class="stp-l">동의·서명</span></div>
+  </div>
+</div>
 
 <div class="main">
 
-<!-- S1: 접수자 역할 -->
-<div class="sec on" id="sec-1"><div class="cd">
-  <div class="cd-t"><div class="cd-ico" style="background:#EFF6FF;color:var(--B)">👤</div><h2>접수자 정보 <small>Agent Role & Info</small></h2></div>
-  <p style="font-size:12px;color:var(--t2);margin-bottom:14px">상담 접수를 진행하는 분의 역할을 선택해 주세요. <strong>벤치마킹:</strong> Salesforce CRM의 역할 기반 접근제어(RBAC)를 참고하여 설계했습니다.</p>
-  <div class="role-grid" id="roleGrid">
-    <div class="role-card" onclick="pickRole(this,'hublink')" data-role="hublink"><div class="r-ico">🏢</div><h3>허브링크 직원</h3><p>설비사·관리자·CEO</p></div>
-    <div class="role-card" onclick="pickRole(this,'linkpeople')" data-role="linkpeople"><div class="r-ico">🤝</div><h3>링크피플 직원</h3><p>상담원·영업사원</p></div>
-    <div class="role-card" onclick="pickRole(this,'dealer')" data-role="dealer"><div class="r-ico">🏪</div><h3>외부 대리점</h3><p>제휴 판매 대리점</p></div>
-  </div>
-  <div class="fg" style="margin-top:14px">
-    <div class="fi"><label><span class="req">*</span> 접수자 성명</label><input type="text" id="agentName" placeholder="이름 입력"></div>
-    <div class="fi"><label><span class="req">*</span> 소속</label><input type="text" id="agentOrg" placeholder="소속 회사/부서명"></div>
-  </div>
-</div>
-<div class="btn-row"><button class="btn btn-p" id="btnS1" onclick="go(2)" disabled>다음 →</button></div></div>
-
-<!-- S2: 사업장 -->
-<div class="sec" id="sec-2"><div class="cd">
-  <div class="cd-t"><div class="cd-ico" style="background:#ECFDF5;color:var(--T)">🏢</div><h2>사업장 선택 <small>Select Building</small></h2></div>
-  <div class="site-grid" id="siteGrid"></div>
-</div>
-<div class="btn-row"><button class="btn btn-g" onclick="go(1)">← 이전</button><button class="btn btn-p" id="btnS2" onclick="go(3)" disabled>다음 →</button></div></div>
-
-<!-- S3: 고객정보 -->
-<div class="sec" id="sec-3"><div class="cd">
-  <div class="cd-t"><div class="cd-ico" style="background:#FEF3C7;color:#D97706">📋</div><h2>고객 정보 <small>Customer Info</small></h2></div>
-  <div class="fg">
-    <div class="fi"><label><span class="req">*</span> 사업자명</label><input type="text" id="bizName" placeholder="(주)회사명"></div>
-    <div class="fi"><label>사업자등록번호</label><input type="text" id="bizNum" placeholder="000-00-00000" maxlength="12"></div>
-    <div class="fi"><label><span class="req">*</span> 담당자명</label><input type="text" id="contactName" placeholder="성명"></div>
-    <div class="fi"><label><span class="req">*</span> 연락처(HP)</label><input type="tel" id="contactPhone" placeholder="010-0000-0000" maxlength="13"></div>
-  </div>
-</div>
-<div class="btn-row"><button class="btn btn-g" onclick="go(2)">← 이전</button><button class="btn btn-p" onclick="go(4)">다음 →</button></div></div>
-
-<!-- S4: 기존정보 -->
-<div class="sec" id="sec-4"><div class="cd">
-  <div class="cd-t"><div class="cd-ico" style="background:#FEE2E2;color:var(--R)">📡</div><h2>기존 사용 정보 <small>Current Service</small></h2></div>
-  <div class="fg">
-    <div class="fi full"><label>건물명(현재)</label><input type="text" id="curBuilding" readonly style="background:var(--BL);font-weight:600;color:var(--B)"></div>
-    <div class="fi"><label>소재지</label><input type="text" id="curAddr" placeholder="시/도/구"></div>
-    <div class="fi"><label>인터넷 통신사</label><select id="curISP"><option value="">선택</option><option>KT</option><option>SK브로드밴드</option><option>LG유플러스</option><option>기타</option></select></div>
-    <div class="fi"><label>구내회선</label><div class="rd-g"><div class="rd" onclick="pickRd(this)"><input type="radio" name="inhouse" value="구내회선"><div class="rd-dot"></div><span>구내회선</span></div><div class="rd" onclick="pickRd(this)"><input type="radio" name="inhouse" value="아님"><div class="rd-dot"></div><span>아님</span></div></div></div>
-    <div class="fi"><label>사용속도</label><div class="rd-g"><div class="rd" onclick="pickRd(this)"><input type="radio" name="speed" value="1G"><div class="rd-dot"></div><span>1G</span></div><div class="rd" onclick="pickRd(this)"><input type="radio" name="speed" value="500M"><div class="rd-dot"></div><span>500M</span></div><div class="rd" onclick="pickRd(this)"><input type="radio" name="speed" value="100M"><div class="rd-dot"></div><span>100M</span></div></div></div>
-    <div class="fi"><label>전화기</label><input type="number" id="phoneCount" placeholder="대" min="0"></div>
-    <div class="fi"><label>직원수(PC)</label><input type="number" id="pcCount" placeholder="명" min="0"></div>
-    <div class="fi"><label><span class="req">*</span> 이사예정일</label><input type="date" id="moveDate"></div>
-  </div>
-</div>
-<div class="btn-row"><button class="btn btn-g" onclick="go(3)">← 이전</button><button class="btn btn-p" onclick="go(5)">다음 →</button></div></div>
-
-<!-- S5: 신규설치 -->
-<div class="sec" id="sec-5"><div class="cd">
-  <div class="cd-t"><div class="cd-ico" style="background:#ECFDF5;color:var(--T)">🏗️</div><h2>신규 설치 정보 <small>New Installation</small></h2></div>
-  <div class="ban"><span>💡</span><p><strong>제휴 혜택:</strong> 이전설치비 면제 + 위약금 면제 + 랜공사 무상. 기존 통신사 무관</p></div>
-  <div class="fg">
-    <div class="fi full"><label><span class="req">*</span> 건물명(신규)</label><input type="text" id="newBuilding" placeholder="이전할 건물"></div>
-    <div class="fi"><label>건물층수</label><input type="text" id="newFloor" placeholder="예: 5층/3"></div>
-    <div class="fi full"><label><span class="req">*</span> 주소지(신규)</label><input type="text" id="newAddr" placeholder="전체 주소"></div>
-  </div>
-  <div class="fi full" style="margin-top:14px">
-    <label style="margin-bottom:6px"><span class="req">*</span> 필요 서비스</label>
-    <div class="ck-grid">
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="인터넷"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>인터넷</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="전화"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>전화(Centrex)</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="TV"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>TV</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="FAX"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>FAX</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="Wifi"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>Wifi</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="CCTV"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>CCTV</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="출입통제"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>출입통제</span></div>
-      <div class="ck" onclick="tCk(this)"><input type="checkbox" value="구내공사"><div class="ck-box"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><span>구내공사</span></div>
+<!-- ═══ STEP 1: 고객정보 ═══ -->
+<div class="sec on" id="sec-1">
+  <div class="cd">
+    <div class="cd-t">
+      <div class="cd-ico" style="background:#FEF3C7;color:#D97706">👤</div>
+      <h2>고객 정보 <small>Customer Information</small></h2>
+    </div>
+    <div class="fg">
+      <div class="fi full">
+        <label><span class="req">*</span> 성명 (계약자)</label>
+        <input type="text" id="custName" placeholder="홍길동" autocomplete="name">
+      </div>
+      <div class="fi">
+        <label><span class="req">*</span> 연락처</label>
+        <input type="tel" id="custPhone" placeholder="010-0000-0000" maxlength="13" autocomplete="tel">
+      </div>
+      <div class="fi">
+        <label><span class="req">*</span> 호실</label>
+        <input type="text" id="custRoom" placeholder="예: C-801">
+      </div>
+      <div class="fi full">
+        <label>현재 사용중인 통신사</label>
+        <select id="curISP">
+          <option value="">선택해 주세요</option>
+          <option value="KT">KT (현재 사용중)</option>
+          <option value="SK브로드밴드">SK브로드밴드</option>
+          <option value="LG유플러스">LG유플러스</option>
+          <option value="미사용">인터넷 미사용</option>
+        </select>
+      </div>
+      <div class="fi full">
+        <label>비고 (요청사항)</label>
+        <textarea id="custMemo" rows="2" placeholder="추가 요청사항이 있으시면 입력해 주세요"></textarea>
+      </div>
     </div>
   </div>
-  <div class="fi full" style="margin-top:12px"><label>기타 요청</label><textarea id="etcRequest" rows="2" placeholder="추가 요청사항"></textarea></div>
-</div>
-<div class="btn-row"><button class="btn btn-g" onclick="go(4)">← 이전</button><button class="btn btn-p" onclick="go(6)">AI 추천 →</button></div></div>
-
-<!-- S6: AI 추천 (다중통신사) -->
-<div class="sec" id="sec-6">
-  <div class="ai-cd">
-    <h3>🤖 Gemini AI 맞춤 상품 추천</h3>
-    <p>기업 정보 기반으로 <strong>KT 우선 추천</strong> + 기존 통신사 대안을 함께 분석합니다. <em style="font-size:11px;color:var(--t3)">벤치마킹: Salesforce Einstein AI 추천 엔진</em></p>
-    <button class="ai-btn" id="aiBtn" onclick="getAI()">✨ AI 추천 받기</button>
-    <div class="ai-res" id="aiRes" style="display:none"></div>
+  <div class="btn-row">
+    <button class="btn btn-p" onclick="goStep(2)">상품 선택 →</button>
   </div>
-  <div class="btn-row"><button class="btn btn-g" onclick="go(5)">← 이전</button><button class="btn btn-p" onclick="go(7)">서명·접수 →</button></div>
 </div>
 
-<!-- S7: 동의 + 서명 + 접수 -->
-<div class="sec" id="sec-7"><div class="cd">
-  <div class="cd-t"><div class="cd-ico" style="background:#FEF2F2;color:var(--R)">🔒</div><h2>개인정보 동의 및 전자서명 <small>Consent & Signature</small></h2></div>
-  <div class="priv"><h3>개인정보 수집·이용 안내</h3><ul>
-    <li><strong>수집항목:</strong> 회사명, 성명, 연락처, 주소, 통신사 정보</li>
-    <li><strong>수집목적:</strong> 서비스 가입 상담, 상품 안내, 요금 설계</li>
-    <li><strong>보유기간:</strong> 상담 보호조 6개월</li>
-    <li><strong>동의거부:</strong> 거부 시 상담 이용 제한</li>
-    <li><strong>정보제공자:</strong> (주)링크피플 [107-86-41233]</li>
-  </ul></div>
-  <div class="consent" id="consentT" onclick="tConsent()"><div class="tgl"></div><span class="consent-txt">개인정보 수집·이용에 동의합니다.</span></div>
-
-  <!-- ★ 전자서명 (signature_pad 라이브러리) -->
-  <div class="sig-wrap">
-    <h4>✍️ 고객 자필 서명 <span style="font-size:10px;font-weight:400;color:var(--t3)">벤치마킹: DocuSign / 모두싸인 전자서명 UX</span></h4>
-    <div class="sig-canvas-wrap" id="sigWrap">
-      <canvas id="sigCanvas"></canvas>
-      <div class="sig-placeholder">이 영역에 서명해 주세요</div>
+<!-- ═══ STEP 2: 상품선택 ═══ -->
+<div class="sec" id="sec-2">
+  <div class="cd">
+    <div class="cd-t">
+      <div class="cd-ico" style="background:#EFF6FF;color:var(--blue)">📦</div>
+      <h2>상품 선택 <small>Select Package</small></h2>
     </div>
-    <div class="sig-actions">
-      <button onclick="clearSig()">🗑️ 지우기</button>
-      <button onclick="undoSig()">↩️ 되돌리기</button>
+    <p style="font-size:12px;color:var(--t2);margin-bottom:14px">원하시는 상품을 선택해 주세요. KT 모바일 결합 시 추가 할인이 적용됩니다.</p>
+    
+    <div class="product-grid" id="productGrid">
+      <div class="product-card" onclick="pickProduct(this,'internet_wifi')" data-pkg="internet_wifi">
+        <span class="pc-badge pc-badge-best">인기 상품</span>
+        <div class="pc-name">인터넷 500M + Wifi</div>
+        <div class="pc-items">
+          <span class="pc-item">기가인터넷 500Mbps</span>
+          <span class="pc-item">Wifi 공유기 제공</span>
+        </div>
+        <div class="pc-price">19,100<small>원/월</small></div>
+        <div class="pc-note">KT 모바일 결합 기준 | 유심변경 시 <strong>15,100원</strong></div>
+      </div>
+
+      <div class="product-card" onclick="pickProduct(this,'internet_tv')" data-pkg="internet_tv">
+        <span class="pc-badge pc-badge-combo">결합 할인</span>
+        <div class="pc-name">인터넷 500M + TV</div>
+        <div class="pc-items">
+          <span class="pc-item">기가인터넷 500Mbps</span>
+          <span class="pc-item">Wifi 공유기 제공</span>
+          <span class="pc-item">올레TV</span>
+        </div>
+        <div class="pc-price">27,200<small>원/월</small></div>
+        <div class="pc-note">KT 모바일 결합 기준 | 유심변경 시 <strong>23,200원</strong></div>
+      </div>
+
+      <div class="product-card" onclick="pickProduct(this,'internet_only')" data-pkg="internet_only">
+        <div class="pc-name">인터넷 500M 단품</div>
+        <div class="pc-items">
+          <span class="pc-item">기가인터넷 500Mbps</span>
+          <span class="pc-item">Wifi 공유기 제공</span>
+        </div>
+        <div class="pc-price">19,100<small>원/월</small></div>
+        <div class="pc-note">모바일 결합 없이 단독 신청</div>
+      </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="opt-row">
+      <div class="opt-row-title">📱 추가 옵션</div>
+      <div class="opt" onclick="toggleOpt(this)">
+        <input type="checkbox" id="optUsim">
+        <div class="opt-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="opt-info">
+          <div class="opt-label">KT 유심 변경</div>
+          <div class="opt-desc">현재 통신사 → KT 전환 (추가 할인 적용)</div>
+        </div>
+      </div>
+      <div class="opt" onclick="toggleOpt(this)">
+        <input type="checkbox" id="optInstall">
+        <div class="opt-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="opt-info">
+          <div class="opt-label">희망 설치일 지정</div>
+          <div class="opt-desc">원하시는 설치일이 있으면 체크</div>
+        </div>
+      </div>
+    </div>
+    <div id="installDateWrap" style="display:none;margin-top:10px">
+      <div class="fi">
+        <label>희망 설치일</label>
+        <input type="date" id="installDate">
+      </div>
+    </div>
+
+    <!-- INSTALL FEE -->
+    <div class="fee-notice">
+      <strong>💰 설치비 안내</strong><br>
+      · 인터넷 단품: <strong>36,000원</strong> (현금 입금)<br>
+      · 인터넷 + TV: <strong>56,000원</strong> (현금 입금)<br>
+      <span style="font-size:11px;color:#B91C1C">※ 설치비는 개통 완료 후 안내드립니다.</span>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-g" onclick="goStep(1)">← 이전</button>
+    <button class="btn btn-p" onclick="goStep(3)">동의·서명 →</button>
+  </div>
+</div>
+
+<!-- ═══ STEP 3: 동의 + 서명 ═══ -->
+<div class="sec" id="sec-3">
+  <div class="cd">
+    <div class="cd-t">
+      <div class="cd-ico" style="background:#FEF2F2;color:var(--kt)">🔒</div>
+      <h2>개인정보 동의 및 서명 <small>Consent & Signature</small></h2>
+    </div>
+
+    <div class="priv">
+      <h3>개인정보 수집·이용 안내</h3>
+      <ul>
+        <li><strong>수집항목:</strong> 성명, 연락처, 호실, 통신사 정보</li>
+        <li><strong>수집목적:</strong> KT 인터넷/TV 가입 상담 및 설치 안내</li>
+        <li><strong>보유기간:</strong> 상담 완료 후 6개월</li>
+        <li><strong>동의거부:</strong> 거부 시 상담 서비스 이용 제한</li>
+        <li><strong>위탁업체:</strong> 채원정보통신 (KT 공인 대리점)</li>
+      </ul>
+    </div>
+
+    <div class="consent" id="consentT" onclick="toggleConsent()">
+      <div class="tgl"></div>
+      <span class="consent-txt">개인정보 수집·이용에 동의합니다.</span>
+    </div>
+
+    <div class="sig-wrap">
+      <h4>✍️ 서명</h4>
+      <div class="sig-canvas-wrap" id="sigWrap">
+        <canvas id="sigCanvas"></canvas>
+        <div class="sig-placeholder">이 영역에 서명해 주세요</div>
+      </div>
+      <div class="sig-actions">
+        <button onclick="clearSig()">🗑️ 지우기</button>
+        <button onclick="undoSig()">↩️ 되돌리기</button>
+      </div>
     </div>
   </div>
 
-  <div class="fg" style="margin-top:14px">
-    <div class="fi"><label>작성일자</label><input type="date" id="signDate"></div>
-    <div class="fi"><label>건물담당자(확인자)</label><input type="text" id="verifier" placeholder="설비사/관리실 직원명"></div>
+  <div class="btn-row" style="flex-direction:column;gap:10px">
+    <button class="btn-submit" id="submitBtn" onclick="submitForm()" disabled>✓ 상담 신청 완료</button>
+    <button class="btn btn-g" onclick="goStep(2)" style="justify-content:center">← 이전으로</button>
   </div>
 </div>
-<div class="btn-row">
-  <button class="btn btn-g" onclick="go(6)">← 이전</button>
-  <button class="btn btn-p" onclick="showSum()">미리보기</button>
-  <button class="btn btn-r" onclick="submit()" id="subBtn" disabled>✓ 접수 완료</button>
-</div></div>
 
-<!-- Success -->
-<div class="sec" id="sec-ok"><div class="cd"><div class="success">
-  <div class="success-ico">✅</div>
-  <h2>접수 완료!</h2>
-  <p>링크피플 상담원이 <strong>영업일 1일 이내</strong> 연락드립니다.<br><span style="font-size:11px;color:var(--ok)">linkin@tcodi.kr로 접수 내용이 자동 발송되었습니다.</span></p>
-  <div class="rcpt" id="rcptBox"></div>
-  <div class="btn-row" style="justify-content:center;margin-top:16px">
-    <button class="btn btn-p" onclick="resetAll()">🔄 새 신청서</button>
-    <button class="btn btn-g" onclick="window.print()">🖨️ 인쇄</button>
+<!-- ═══ SUCCESS ═══ -->
+<div class="sec" id="sec-ok">
+  <div class="cd">
+    <div class="success">
+      <div class="success-ico">✅</div>
+      <h2>상담 신청 완료!</h2>
+      <p>채원정보통신 상담원이 <strong>영업일 1일 이내</strong> 연락드립니다.<br>
+      <span style="font-size:11px;color:var(--teal)">📞 문의: 010-5700-2227</span></p>
+      <div class="rcpt" id="rcptBox"></div>
+      <div class="btn-row" style="justify-content:center;margin-top:16px">
+        <button class="btn btn-p" onclick="resetForm()">🔄 새 신청서</button>
+      </div>
+    </div>
   </div>
-</div></div></div>
+</div>
 
 </div>
 
-<div class="ftr"><p>허브링크(주) × 링크피플 통신복지 CRM v4 | <span id="ftrC"></span></p></div>
+<!-- FOOTER -->
+<div class="ftr">
+  <p>채원정보통신 (KT 공인 대리점) | <a href="tel:010-5700-2227">📞 010-5700-2227</a><br>
+  다산현대프리미어캠퍼스 C동 기숙사 관리단 제휴 서비스</p>
+</div>
+
+<!-- CONTACT FLOAT -->
+<a class="contact-float" href="tel:010-5700-2227" id="contactFloat">
+  📞 전화 상담
+</a>
 
 <script>
 // ═══ CONFIG ═══
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKyJs-_TcjXvxciP0XVf4qRNx10AE9YeCp8RjGcDssIGFtPbxXlMGbijq7FURfxgwgWw/exec"; // Apps Script 배포 URL 입력
-const SITES = {
-  dasan: { code:"dasan", name:"다산현대프리미어캠퍼스", addr:"경기 남양주시 다산중앙로 105", phone:"031-552-5600", status:"active", start:"2026-03-16" },
-};
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKyJs-_TcjXvxciP0XVf4qRNx10AE9YeCp8RjGcDssIGFtPbxXlMGbijq7FURfxgwgWw/exec";
+const SITE_NAME = "다산현대프리미어캠퍼스 C동";
+const SITE_CODE = "dasan_c";
 
 // ═══ STATE ═══
-let step=1, site=null, role=null, consented=false, aiData={rec:"",reason:""}, sigPad=null;
-let customerMode=false; // QR 고객 직접 접속 모드
+let step = 1;
+let selectedProduct = '';
+let consented = false;
+let sigPad = null;
+
+// ═══ PRODUCT DATA ═══
+const PRODUCTS = {
+  internet_wifi: { name: '인터넷 500M + Wifi', price: '19,100원/월', installFee: '36,000원' },
+  internet_tv: { name: '인터넷 500M + TV', price: '27,200원/월', installFee: '56,000원' },
+  internet_only: { name: '인터넷 500M 단품', price: '19,100원/월', installFee: '36,000원' }
+};
 
 // ═══ INIT ═══
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('signDate').value=new Date().toISOString().slice(0,10);
-  renderSites();
+document.addEventListener('DOMContentLoaded', () => {
   initSigPad();
-  setupFmt();
-
-  // 고객 QR 모드 감지: ?site=dasan 등
-  const urlParams=new URLSearchParams(window.location.search);
-  const siteParam=urlParams.get('site');
-  if(siteParam && SITES[siteParam]){
-    enterCustomerMode(siteParam);
-  }
+  setupFormatters();
+  // Show/hide install date
+  document.getElementById('optInstall')?.closest('.opt')?.addEventListener('click', () => {
+    setTimeout(() => {
+      const wrap = document.getElementById('installDateWrap');
+      wrap.style.display = document.getElementById('optInstall')?.closest('.opt')?.classList.contains('on') ? 'block' : 'none';
+    }, 50);
+  });
 });
 
-// ═══ 고객 전용 모드 ═══
-function enterCustomerMode(siteCode){
-  customerMode=true;
-  // 사업장 자동 설정
-  site=SITES[siteCode]; site._code=siteCode;
-  document.getElementById('curBuilding').value=site.name;
-
-  // 접수자 정보 자동 설정 (고객 직접 접수)
-  role='customer';
-  document.getElementById('agentName').value='고객직접접수';
-  document.getElementById('agentOrg').value=site.name;
-
-  // 헤더 변경 — 내부 정보 숨김
-  document.querySelector('.hdr-badge').textContent=site.name+' 통신복지 서비스';
-  document.querySelector('.hdr h1').innerHTML='통신 상담 <em>신청서</em>';
-  document.getElementById('hdrSub').textContent='퇴거 입주사를 위한 특별 혜택 안내';
-  document.getElementById('siteInd').style.display='none';
-  document.getElementById('ftrC').textContent=`문의: ${site.phone}`;
-
-  // 푸터 변경
-  document.querySelector('.ftr p').innerHTML=`${site.name} 관리단 제휴 서비스 | ${site.phone}`;
-
-  // 프로그레스 바 — step 1,2 숨기고 3부터 표시
-  const progBar=document.getElementById('progBar');
-  progBar.innerHTML=`
-    <div class="stp on" data-s="3"><div class="stp-n">1</div><span class="stp-l">고객정보</span></div><div class="stp-line"></div>
-    <div class="stp" data-s="4"><div class="stp-n">2</div><span class="stp-l">기존정보</span></div><div class="stp-line"></div>
-    <div class="stp" data-s="5"><div class="stp-n">3</div><span class="stp-l">신규설치</span></div><div class="stp-line"></div>
-    <div class="stp" data-s="6"><div class="stp-n">4</div><span class="stp-l">AI추천</span></div><div class="stp-line"></div>
-    <div class="stp" data-s="7"><div class="stp-n">5</div><span class="stp-l">서명·접수</span></div>
-  `;
-
-  // Step 3(고객정보)부터 시작
-  step=3;
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
-  document.getElementById('sec-3').classList.add('on');
+// ═══ NAVIGATION ═══
+function goStep(n) {
+  if (n > step && step === 1 && !validateStep1()) return;
+  if (n > step && step === 2 && !validateStep2()) return;
+  step = n;
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.getElementById('sec-' + n).classList.add('on');
   updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 3) setTimeout(() => initSigPad(), 100);
 }
 
-function updateProgress(){
-  if(customerMode){
-    // 고객 모드: step 3~7을 1~5로 매핑
-    const stps=document.querySelectorAll('.stp');
-    const lines=document.querySelectorAll('.stp-line');
-    const map={3:0,4:1,5:2,6:3,7:4};
-    const idx=map[step]??0;
-    stps.forEach((s,i)=>{s.classList.remove('on','ok');if(i<idx)s.classList.add('ok');if(i===idx)s.classList.add('on')});
-    lines.forEach((l,i)=>l.classList.toggle('ok',i<idx));
-  } else {
-    document.querySelectorAll('.stp').forEach((s,i)=>{s.classList.remove('on','ok');if(i+1<step)s.classList.add('ok');if(i+1===step)s.classList.add('on')});
-    document.querySelectorAll('.stp-line').forEach((l,i)=>l.classList.toggle('ok',i+1<step));
-  }
-}
-
-function initSigPad(){
-  const canvas=document.getElementById('sigCanvas');
-  const wrap=document.getElementById('sigWrap');
-  // Set proper resolution
-  const ratio=Math.max(window.devicePixelRatio||1,1);
-  canvas.width=canvas.offsetWidth*ratio;
-  canvas.height=160*ratio;
-  canvas.style.height='160px';
-  canvas.getContext('2d').scale(ratio,ratio);
-
-  sigPad=new SignaturePad(canvas,{
-    minWidth:1.5,maxWidth:3,penColor:'#16162A',
-    backgroundColor:'rgba(255,255,255,0)',
-    onBegin:()=>wrap.classList.add('has-sig'),
+function updateProgress() {
+  const stps = document.querySelectorAll('.stp');
+  const lines = document.querySelectorAll('.stp-line');
+  stps.forEach((s, i) => {
+    s.classList.remove('on', 'ok');
+    if (i + 1 < step) s.classList.add('ok');
+    if (i + 1 === step) s.classList.add('on');
   });
+  lines.forEach((l, i) => l.classList.toggle('ok', i + 1 < step));
 }
 
-// ═══ ROLE ═══
-function pickRole(el,r){
-  role=r;
-  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));
+// ═══ VALIDATION ═══
+function validateStep1() {
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const room = document.getElementById('custRoom').value.trim();
+  if (!name || !phone || !room) {
+    alert('성명, 연락처, 호실은 필수 입력입니다.');
+    return false;
+  }
+  if (phone.replace(/[^0-9]/g, '').length < 10) {
+    alert('올바른 연락처를 입력해 주세요.');
+    return false;
+  }
+  return true;
+}
+
+function validateStep2() {
+  if (!selectedProduct) {
+    alert('상품을 선택해 주세요.');
+    return false;
+  }
+  return true;
+}
+
+// ═══ PRODUCT SELECTION ═══
+function pickProduct(el, pkg) {
+  selectedProduct = pkg;
+  document.querySelectorAll('.product-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  document.getElementById('btnS1').disabled=false;
-  // Always update org based on role (fixes re-selection bug)
-  const orgField=document.getElementById('agentOrg');
-  if(r==='hublink') orgField.value='허브링크(주)';
-  else if(r==='linkpeople') orgField.value='(주)링크피플';
-  else orgField.value='';
 }
 
-// ═══ SITES ═══
-function renderSites(){
-  const g=document.getElementById('siteGrid'); g.innerHTML='';
-  for(const[k,s] of Object.entries(SITES)){
-    const on=s.status==='active';
-    const d=document.createElement('div'); d.className='site-card'; d.dataset.code=k;
-    d.innerHTML=`<h3>${s.name}</h3><p>📍 ${s.addr}<br>📞 ${s.phone}</p><span class="tag ${on?'tag-on':'tag-soon'}">${on?'운영중':'준비중'}</span>`;
-    if(on) d.onclick=()=>pickSite(k); else{d.style.opacity='.5';d.style.cursor='not-allowed'}
-    g.appendChild(d);
-  }
-}
-function pickSite(k){
-  site=SITES[k]; site._code=k;
-  document.querySelectorAll('.site-card').forEach(c=>c.classList.remove('sel'));
-  document.querySelector(`.site-card[data-code="${k}"]`).classList.add('sel');
-  document.getElementById('btnS2').disabled=false;
-  document.getElementById('hdrSub').textContent=`${site.name} · 통신복지 상담 접수`;
-  document.getElementById('siteInd').style.display='inline-flex';
-  document.getElementById('siteLbl').textContent=site.name;
-  document.getElementById('curBuilding').value=site.name;
-  document.getElementById('ftrC').textContent=`${site.phone} | ${site.start}~`;
+// ═══ OPTION TOGGLE ═══
+function toggleOpt(el) {
+  el.classList.toggle('on');
+  const inp = el.querySelector('input');
+  if (inp) inp.checked = el.classList.contains('on');
 }
 
-// ═══ NAV ═══
-function go(n){
-  // 고객 모드: step 1, 2로 못 가게 차단
-  if(customerMode && n<3) return;
-  if(n>step&&step===3&&!valS3()) return;
-  step=n;
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
-  document.getElementById('sec-'+n).classList.add('on');
-  updateProgress();
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(n===7) setTimeout(()=>initSigPad(),100);
-
-  // 고객 모드: Step 3의 이전 버튼 숨기기
-  if(customerMode){
-    const sec3Btns=document.querySelector('#sec-3 .btn-row');
-    const backBtn=sec3Btns?.querySelector('.btn-g');
-    if(backBtn) backBtn.style.display='none';
-  }
-}
-function valS3(){
-  if(!document.getElementById('bizName').value.trim()||!document.getElementById('contactName').value.trim()||!document.getElementById('contactPhone').value.trim()){alert('사업자명, 담당자명, 연락처 필수');return false}return true;
+// ═══ CONSENT & SIGNATURE ═══
+function toggleConsent() {
+  consented = !consented;
+  document.getElementById('consentT').classList.toggle('yes', consented);
+  checkSubmitReady();
 }
 
-// ═══ CONTROLS ═══
-function pickRd(el){el.closest('.rd-g').querySelectorAll('.rd').forEach(r=>r.classList.remove('on'));el.classList.add('on');el.querySelector('input').checked=true}
-function tCk(el){el.classList.toggle('on');el.querySelector('input').checked=el.classList.contains('on')}
-function tConsent(){consented=!consented;document.getElementById('consentT').classList.toggle('yes',consented);document.getElementById('subBtn').disabled=!(consented&&sigPad&&!sigPad.isEmpty())}
-function clearSig(){sigPad.clear();document.getElementById('sigWrap').classList.remove('has-sig');document.getElementById('subBtn').disabled=true}
-function undoSig(){const d=sigPad.toData();if(d.length){d.pop();sigPad.fromData(d);if(!d.length)document.getElementById('sigWrap').classList.remove('has-sig')}}
-function setupFmt(){
-  document.getElementById('contactPhone').addEventListener('input',function(e){let v=e.target.value.replace(/[^0-9]/g,'');if(v.length>3&&v.length<=7)v=v.slice(0,3)+'-'+v.slice(3);else if(v.length>7)v=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);e.target.value=v});
-  document.getElementById('bizNum').addEventListener('input',function(e){let v=e.target.value.replace(/[^0-9]/g,'');if(v.length>3&&v.length<=5)v=v.slice(0,3)+'-'+v.slice(3);else if(v.length>5)v=v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5,10);e.target.value=v});
-  // Enable submit when both consent & signature
-  document.getElementById('sigCanvas').addEventListener('pointerup',()=>{
-    setTimeout(()=>{document.getElementById('subBtn').disabled=!(consented&&sigPad&&!sigPad.isEmpty())},100);
+function initSigPad() {
+  const canvas = document.getElementById('sigCanvas');
+  const wrap = document.getElementById('sigWrap');
+  if (!canvas) return;
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  canvas.width = canvas.offsetWidth * ratio;
+  canvas.height = 150 * ratio;
+  canvas.style.height = '150px';
+  canvas.getContext('2d').scale(ratio, ratio);
+  sigPad = new SignaturePad(canvas, {
+    minWidth: 1.5, maxWidth: 3,
+    penColor: '#1A1A2E',
+    backgroundColor: 'rgba(255,255,255,0)',
+    onBegin: () => wrap.classList.add('has-sig'),
   });
 }
 
-// ═══ AI (via Apps Script proxy — API키 서버보관) ═══
-async function getAI(){
-  const btn=document.getElementById('aiBtn'),res=document.getElementById('aiRes');
-  btn.disabled=true;btn.textContent='⏳ 분석중...';
-  res.style.display='block';res.className='ai-res ld';res.textContent='Gemini AI 분석 중...';
-
-  if(!APPS_SCRIPT_URL){
-    res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ Apps Script URL 미설정.</p>';
-    btn.disabled=false;btn.textContent='✨ AI 추천 받기';return;
-  }
-
-  const svcs=[];
-  document.querySelectorAll('.ck.on span').forEach(s=>svcs.push(s.textContent));
-  const rdV=n=>{const el=document.querySelector(`input[name="${n}"]:checked`);return el?el.value:''};
-
-  const params=new URLSearchParams({
-    action:'gemini',
-    pcCount:document.getElementById('pcCount').value||'미입력',
-    phoneCount:document.getElementById('phoneCount').value||'0',
-    curISP:document.getElementById('curISP').value||'미선택',
-    speed:rdV('speed')||'미선택',
-    services:svcs.join(', ')||'미선택',
-    newBuilding:document.getElementById('newBuilding').value||'미입력',
-  });
-  const url=APPS_SCRIPT_URL+'?'+params.toString();
-
-  try{
-    const r=await fetch(url);
-    const raw=await r.text();
-    console.log('AI raw response:',raw.substring(0,500));
-
-    let d;
-    try{ d=JSON.parse(raw); }catch(pe){
-      // 응답이 JSON이 아닌 경우 (HTML 리다이렉트 페이지 등)
-      res.className='ai-res';
-      res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ 응답 파싱 오류. 응답 앞부분: '+raw.substring(0,200).replace(/</g,'&lt;')+'</p>';
-      btn.disabled=false;btn.textContent='🔄 다시 추천';return;
-    }
-
-    const text=d.text||d.error||'';
-    if(d.status==='error'){
-      res.className='ai-res';res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ 서버 오류: '+text+'</p>';
-      btn.disabled=false;btn.textContent='🔄 다시 추천';return;
-    }
-
-    const m=text.match(/\{[\s\S]*\}/);
-    if(m){const rec=JSON.parse(m[0]);renderAI(rec);aiData.rec=rec.packages?.map(p=>`[${p.carrier}]${p.name}`).join(' / ')||'';aiData.reason=rec.overall_reason||''}
-    else{res.className='ai-res';res.innerHTML=`<p style="font-size:12px;color:var(--t2);white-space:pre-wrap">${text||'응답이 비어 있습니다.'}</p>`}
-  }catch(e){
-    console.error('AI fetch error:',e);
-    res.className='ai-res';
-    res.innerHTML='<p style="color:var(--R);font-size:12px">⚠️ 네트워크 오류: '+e.message+'<br><br>이 오류는 CORS 차단일 수 있습니다.<br>파일을 로컬(file://)로 열었다면 GitHub Pages에 업로드 후 테스트해 주세요.</p>';
-  }
-  btn.disabled=false;btn.textContent='🔄 다시 추천';
+function clearSig() {
+  if (sigPad) sigPad.clear();
+  document.getElementById('sigWrap').classList.remove('has-sig');
+  checkSubmitReady();
 }
 
-function renderAI(rec){
-  const res=document.getElementById('aiRes');res.className='ai-res';let h='';
-  const tagClass={'KT':'ai-tag-kt','SK브로드밴드':'ai-tag-sk','LG유플러스':'ai-tag-lg'};
-  (rec.packages||[]).forEach((p,i)=>{
-    const tc=tagClass[p.carrier]||'ai-tag-kt';
-    h+=`<div class="pkg"><div class="pkg-name"><span class="ai-tag ${tc}">${p.carrier}</span>${i===0?'<span class="ai-tag ai-tag-kt">최적추천</span>':''}${p.name}</div>
-    <div style="margin:4px 0">${(p.items||[]).map(it=>`<span style="display:inline-block;font-size:11px;color:var(--t2);background:#F5F5F5;padding:1px 6px;border-radius:3px;margin:1px 3px 1px 0">${it}</span>`).join('')}</div>
-    <div class="pkg-price">${p.monthly_total||''}</div><div class="pkg-reason">${p.reason||''}</div></div>`;
-  });
-  if(rec.overall_reason)h+=`<div style="margin-top:10px;padding:8px 12px;background:#F0F7FF;border-radius:5px;font-size:11px;color:var(--t2)"><strong style="color:var(--B)">📊</strong> ${rec.overall_reason}</div>`;
-  if(rec.tip)h+=`<div style="margin-top:6px;font-size:11px;color:var(--T)">💡 ${rec.tip}</div>`;
-  res.innerHTML=h;
+function undoSig() {
+  if (!sigPad) return;
+  const d = sigPad.toData();
+  if (d.length) { d.pop(); sigPad.fromData(d); if (!d.length) document.getElementById('sigWrap').classList.remove('has-sig'); }
 }
 
-// ═══ SUBMIT ═══
-function collect(){
-  const svcs=[];document.querySelectorAll('.ck.on span').forEach(s=>svcs.push(s.textContent));
-  const rv=n=>{const e=document.querySelector(`input[name="${n}"]:checked`);return e?e.value:''};
-  return{
-    action:'submit',siteCode:site?._code||'',siteName:site?.name||'',
-    agentRole:role||'',agentName:document.getElementById('agentName').value,agentOrg:document.getElementById('agentOrg').value,
-    bizName:document.getElementById('bizName').value,bizNum:document.getElementById('bizNum').value,
-    contactName:document.getElementById('contactName').value,contactPhone:document.getElementById('contactPhone').value,
-    curBuilding:document.getElementById('curBuilding').value,curAddr:document.getElementById('curAddr').value,
-    curISP:document.getElementById('curISP').value,inhouse:rv('inhouse'),speed:rv('speed'),
-    phoneCount:document.getElementById('phoneCount').value,pcCount:document.getElementById('pcCount').value,
-    moveDate:document.getElementById('moveDate').value,
-    newBuilding:document.getElementById('newBuilding').value,newFloor:document.getElementById('newFloor').value,
-    newAddr:document.getElementById('newAddr').value,services:svcs.join(', '),
-    etcRequest:document.getElementById('etcRequest').value,
-    aiRecommendation:aiData.rec,aiReason:aiData.reason,
-    consent:consented,signatureData:sigPad&&!sigPad.isEmpty()?sigPad.toDataURL('image/png'):'',
-    signDate:document.getElementById('signDate').value,verifier:document.getElementById('verifier').value,
+function checkSubmitReady() {
+  const ready = consented && sigPad && !sigPad.isEmpty();
+  document.getElementById('submitBtn').disabled = !ready;
+}
+
+// Listen for signature end
+document.addEventListener('pointerup', () => {
+  setTimeout(checkSubmitReady, 100);
+});
+
+// ═══ FORMATTERS ═══
+function setupFormatters() {
+  document.getElementById('custPhone').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/[^0-9]/g, '');
+    if (v.length > 3 && v.length <= 7) v = v.slice(0,3) + '-' + v.slice(3);
+    else if (v.length > 7) v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
+    e.target.value = v;
+  });
+}
+
+// ═══ COLLECT DATA ═══
+function collectData() {
+  const pkg = PRODUCTS[selectedProduct] || {};
+  const opts = [];
+  if (document.getElementById('optUsim')?.closest('.opt')?.classList.contains('on')) opts.push('KT유심변경');
+  if (document.getElementById('optInstall')?.closest('.opt')?.classList.contains('on')) opts.push('설치일지정');
+  
+  return {
+    action: 'submit',
+    siteCode: SITE_CODE,
+    siteName: SITE_NAME,
+    agentRole: 'customer_qr',
+    agentName: '고객QR접수',
+    agentOrg: '채원정보통신',
+    bizName: document.getElementById('custName').value.trim(),
+    bizNum: '',
+    contactName: document.getElementById('custName').value.trim(),
+    contactPhone: document.getElementById('custPhone').value.trim(),
+    curBuilding: SITE_NAME,
+    curAddr: '경기 남양주시 다산중앙로 105',
+    curISP: document.getElementById('curISP').value || '미선택',
+    inhouse: '구내회선',
+    speed: '500M',
+    phoneCount: '',
+    pcCount: '',
+    moveDate: document.getElementById('installDate')?.value || '',
+    newBuilding: SITE_NAME,
+    newFloor: document.getElementById('custRoom').value.trim(),
+    newAddr: '경기 남양주시 다산중앙로 105',
+    services: pkg.name || '',
+    etcRequest: document.getElementById('custMemo')?.value || '',
+    aiRecommendation: '',
+    aiReason: '',
+    consent: consented,
+    signatureData: sigPad && !sigPad.isEmpty() ? sigPad.toDataURL('image/png') : '',
+    signDate: new Date().toISOString().slice(0,10),
+    verifier: '',
+    // Extra fields
+    selectedPackage: selectedProduct,
+    packageName: pkg.name || '',
+    packagePrice: pkg.price || '',
+    installFee: pkg.installFee || '',
+    options: opts.join(', '),
+    roomNumber: document.getElementById('custRoom').value.trim(),
+    source: 'QR_C동기숙사'
   };
 }
 
-function showSum(){
-  // Quick summary display (reuse receipt area temporarily)
-  const d=collect();
-  alert(`접수 미리보기:\n사업장: ${d.siteName}\n사업자: ${d.bizName}\n담당자: ${d.contactName} / ${d.contactPhone}\n이사: ${d.moveDate||'미정'}\n서비스: ${d.services}\nAI: ${d.aiRecommendation||'미사용'}\n서명: ${d.signatureData?'있음':'없음'}`);
-}
+// ═══ SUBMIT ═══
+async function submitForm() {
+  if (!consented) { alert('개인정보 수집·이용에 동의해 주세요.'); return; }
+  if (!sigPad || sigPad.isEmpty()) { alert('서명을 입력해 주세요.'); return; }
 
-async function submit(){
-  if(!consented){alert('동의 필요');return}
-  if(sigPad.isEmpty()){alert('서명을 입력해 주세요.');return}
-  const btn=document.getElementById('subBtn');btn.disabled=true;btn.innerHTML='⏳ 접수중...';
-  const fd=collect();
-  let rid='HB-'+Date.now().toString(36).toUpperCase(), sync='오프라인';
-  if(APPS_SCRIPT_URL){
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(fd)});sync='✅ Sheets저장 + 이메일발송'}catch(e){console.error(e);sync='⚠️ 오프라인'}
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ 접수중...';
+
+  const fd = collectData();
+  let rid = 'CW-' + Date.now().toString(36).toUpperCase();
+  let syncMsg = '오프라인 저장';
+
+  if (APPS_SCRIPT_URL) {
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(fd)
+      });
+      syncMsg = '✅ 접수 완료';
+    } catch(e) {
+      console.error('Submit error:', e);
+      syncMsg = '⚠️ 네트워크 오류 (재시도 필요)';
+    }
   }
-  const rcpt={'접수번호':rid,'접수일시':new Date().toLocaleString('ko-KR'),'사업장':fd.siteName,'접수자':`${fd.agentRole} / ${fd.agentName}`,'사업자명':fd.bizName,'담당자':fd.contactName+' / '+fd.contactPhone,'서비스':fd.services||'-','AI추천':fd.aiRecommendation||'-','서명':'✅ 전자서명완료','저장':sync};
-  let h='';for(const[k,v] of Object.entries(rcpt))h+=`<div class="rcpt-r"><span class="l">${k}</span><span class="v">${v}</span></div>`;
-  document.getElementById('rcptBox').innerHTML=h;
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+
+  // Show receipt
+  const pkg = PRODUCTS[selectedProduct] || {};
+  const rcptData = {
+    '접수번호': rid,
+    '접수일시': new Date().toLocaleString('ko-KR'),
+    '성명': fd.contactName,
+    '연락처': fd.contactPhone,
+    '호실': fd.roomNumber,
+    '선택상품': pkg.name || '-',
+    '월 요금': pkg.price || '-',
+    '설치비': pkg.installFee || '-',
+    '서명': '✅ 전자서명 완료',
+    '상태': syncMsg
+  };
+
+  let h = '';
+  for (const [k, v] of Object.entries(rcptData)) {
+    h += `<div class="rcpt-r"><span class="rl">${k}</span><span class="rv">${v}</span></div>`;
+  }
+  document.getElementById('rcptBox').innerHTML = h;
+
+  // Switch to success view
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
   document.getElementById('sec-ok').classList.add('on');
-  document.querySelectorAll('.stp').forEach(s=>{s.classList.remove('on');s.classList.add('ok')});
-  document.querySelectorAll('.stp-line').forEach(l=>l.classList.add('ok'));
+  document.querySelectorAll('.stp').forEach(s => { s.classList.remove('on'); s.classList.add('ok'); });
+  document.querySelectorAll('.stp-line').forEach(l => l.classList.add('ok'));
+
+  // Hide contact float
+  document.getElementById('contactFloat').style.display = 'none';
 }
 
-function resetAll(){
-  document.querySelectorAll('input:not([type=radio]):not([type=checkbox])').forEach(i=>{if(i.id!=='curBuilding')i.value=''});
-  document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
-  document.querySelectorAll('textarea').forEach(t=>t.value='');
-  document.querySelectorAll('.rd,.ck,.site-card,.role-card').forEach(e=>e.classList.remove('on','sel'));
-  document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(i=>i.checked=false);
-  consented=false;aiData={rec:'',reason:''};
+// ═══ RESET ═══
+function resetForm() {
+  document.querySelectorAll('input:not([type=checkbox])').forEach(i => i.value = '');
+  document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  document.querySelectorAll('textarea').forEach(t => t.value = '');
+  document.querySelectorAll('.product-card').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('.opt').forEach(o => { o.classList.remove('on'); const inp = o.querySelector('input'); if(inp) inp.checked = false; });
+  document.getElementById('installDateWrap').style.display = 'none';
+  selectedProduct = '';
+  consented = false;
   document.getElementById('consentT').classList.remove('yes');
-  document.getElementById('aiRes').style.display='none';
-  if(sigPad)sigPad.clear();
+  if (sigPad) sigPad.clear();
   document.getElementById('sigWrap').classList.remove('has-sig');
-  document.getElementById('signDate').value=new Date().toISOString().slice(0,10);
-  document.getElementById('subBtn').disabled=true;
-
-  if(customerMode){
-    // 고객 모드: 사업장·역할 유지, step 3부터 재시작
-    const urlParams=new URLSearchParams(window.location.search);
-    const siteCode=urlParams.get('site');
-    if(siteCode && SITES[siteCode]) enterCustomerMode(siteCode);
-  } else {
-    site=null;role=null;
-    ['btnS1','btnS2'].forEach(id=>document.getElementById(id).disabled=true);
-    document.getElementById('siteInd').style.display='none';
-    step=1;go(1);
-  }
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').innerHTML = '✓ 상담 신청 완료';
+  document.getElementById('contactFloat').style.display = 'flex';
+  step = 1;
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.getElementById('sec-1').classList.add('on');
+  updateProgress();
+  window.scrollTo({ top: 0 });
 }
 </script>
 </body>
